@@ -1,0 +1,131 @@
+{
+  "config": {
+    "name": "rcaeval_re1_gw030",
+    "version": "apex_rca_v1",
+    "data_dir": "D:\\apex-rca\\data\\rcaeval",
+    "results_dir": "D:\\apex-rca\\results",
+    "min_window_samples": 30,
+    "anomaly_effect_cap": 20.0,
+    "top_k_metrics": 3,
+    "graph_weight": 0.3,
+    "extra_weight": 0.25,
+    "pagerank_damping": 0.85,
+    "min_trace_edge_count": 3,
+    "graph_mode": "auto",
+    "seed": 42,
+    "task": "retrospective_post_injection_diagnosis",
+    "created_at_utc": "2026-10-11T17:28:44+00:00"
+  },
+  "n_indexed_selected": 375,
+  "wall_time_s": 15.565733700001147,
+  "methods": {
+    "metrics_graph": {
+      "n_evaluated": 373,
+      "n_skipped": 2,
+      "output": "D:\\apex-rca\\results\\metrics_graph_re1_gw030.csv",
+      "summary": {
+        "n_evaluated": 373,
+        "hit1": {
+          "mean": 0.8096514745308311,
+          "ci95_low": 0.7694369973190348,
+          "ci95_high": 0.8498659517426274
+        },
+        "hit3": {
+          "mean": 0.9651474530831099,
+          "ci95_low": 0.9463806970509383,
+          "ci95_high": 0.9839142091152815
+        },
+        "hit5": {
+          "mean": 0.9946380697050938,
+          "ci95_low": 0.9865951742627346,
+          "ci95_high": 1.0
+        },
+        "mrr": {
+          "mean": 0.8881335375973446,
+          "ci95_low": 0.8647159453593769,
+          "ci95_high": 0.9114612855866207
+        },
+        "by": {
+          "suite": [
+            {
+              "group": "RE1",
+              "n": 373,
+              "hit1": 0.8096514745308311,
+              "hit3": 0.9651474530831099,
+              "hit5": 0.9946380697050938,
+              "mrr": 0.8881335375973446
+            }
+          ],
+          "system": [
+            {
+              "group": "Online Boutique",
+              "n": 123,
+              "hit1": 0.8373983739837398,
+              "hit3": 0.959349593495935,
+              "hit5": 1.0,
+              "mrr": 0.902710027100271
+            },
+            {
+              "group": "Sock Shop",
+              "n": 125,
+              "hit1": 0.896,
+              "hit3": 0.992,
+              "hit5": 1.0,
+              "mrr": 0.942
+            },
+            {
+              "group": "Train Ticket",
+              "n": 125,
+              "hit1": 0.696,
+              "hit3": 0.944,
+              "hit5": 0.984,
+              "mrr": 0.8199238095238095
+            }
+          ],
+          "fault": [
+            {
+              "group": "cpu",
+              "n": 74,
+              "hit1": 0.9324324324324325,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9662162162162162
+            },
+            {
+              "group": "delay",
+              "n": 75,
+              "hit1": 0.68,
+              "hit3": 0.96,
+              "hit5": 1.0,
+              "mrr": 0.8248888888888888
+            },
+            {
+              "group": "disk",
+              "n": 75,
+              "hit1": 0.9733333333333334,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9866666666666667
+            },
+            {
+              "group": "loss",
+              "n": 74,
+              "hit1": 0.5,
+              "hit3": 0.8648648648648649,
+              "hit5": 0.972972972972973,
+              "mrr": 0.6811776061776061
+            },
+            {
+              "group": "mem",
+              "n": 75,
+              "hit1": 0.96,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.98
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,3 @@
+case,method,reason
+re1ob_currencyservice_loss_1,anomaly_only,"inject_time outside recorded [time_start, time_end] window"
+re1ob_productcatalogservice_cpu_3,anomaly_only,"inject_time outside recorded [time_start, time_end] window"

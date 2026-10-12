@@ -1,0 +1,371 @@
+{
+  "config": {
+    "name": "rcaeval_audit1",
+    "version": "apex_rca_v1",
+    "data_dir": "D:\\apex-rca\\data\\rcaeval",
+    "results_dir": "D:\\apex-rca\\results",
+    "min_window_samples": 30,
+    "anomaly_effect_cap": 20.0,
+    "top_k_metrics": 3,
+    "graph_weight": 0.3,
+    "extra_weight": 0.25,
+    "pagerank_damping": 0.85,
+    "min_trace_edge_count": 3,
+    "graph_mode": "auto",
+    "seed": 42,
+    "task": "retrospective_post_injection_diagnosis",
+    "created_at_utc": "2026-10-11T15:28:29+00:00"
+  },
+  "n_indexed_selected": 20,
+  "wall_time_s": 1.6639517000003252,
+  "methods": {
+    "anomaly_only": {
+      "n_evaluated": 20,
+      "n_skipped": 0,
+      "output": "D:\\apex-rca\\results\\anomaly_only_audit1.csv",
+      "summary": {
+        "n_evaluated": 20,
+        "hit1": {
+          "mean": 0.9,
+          "ci95_low": 0.75,
+          "ci95_high": 1.0
+        },
+        "hit3": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "hit5": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "mrr": {
+          "mean": 0.9416666666666667,
+          "ci95_low": 0.85,
+          "ci95_high": 1.0
+        },
+        "by": {
+          "suite": [
+            {
+              "group": "RE1",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "system": [
+            {
+              "group": "Online Boutique",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "fault": [
+            {
+              "group": "cpu",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "delay",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "disk",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "loss",
+              "n": 5,
+              "hit1": 0.6,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.7666666666666667
+            }
+          ]
+        }
+      }
+    },
+    "metrics_graph": {
+      "n_evaluated": 20,
+      "n_skipped": 0,
+      "output": "D:\\apex-rca\\results\\metrics_graph_audit1.csv",
+      "summary": {
+        "n_evaluated": 20,
+        "hit1": {
+          "mean": 0.9,
+          "ci95_low": 0.75,
+          "ci95_high": 1.0
+        },
+        "hit3": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "hit5": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "mrr": {
+          "mean": 0.9416666666666667,
+          "ci95_low": 0.85,
+          "ci95_high": 1.0
+        },
+        "by": {
+          "suite": [
+            {
+              "group": "RE1",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "system": [
+            {
+              "group": "Online Boutique",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "fault": [
+            {
+              "group": "cpu",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "delay",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "disk",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "loss",
+              "n": 5,
+              "hit1": 0.6,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.7666666666666667
+            }
+          ]
+        }
+      }
+    },
+    "metrics_logs_traces": {
+      "n_evaluated": 20,
+      "n_skipped": 0,
+      "output": "D:\\apex-rca\\results\\metrics_logs_traces_audit1.csv",
+      "summary": {
+        "n_evaluated": 20,
+        "hit1": {
+          "mean": 0.9,
+          "ci95_low": 0.75,
+          "ci95_high": 1.0
+        },
+        "hit3": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "hit5": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "mrr": {
+          "mean": 0.9416666666666667,
+          "ci95_low": 0.85,
+          "ci95_high": 1.0
+        },
+        "by": {
+          "suite": [
+            {
+              "group": "RE1",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "system": [
+            {
+              "group": "Online Boutique",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "fault": [
+            {
+              "group": "cpu",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "delay",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "disk",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "loss",
+              "n": 5,
+              "hit1": 0.6,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.7666666666666667
+            }
+          ]
+        }
+      }
+    },
+    "full": {
+      "n_evaluated": 20,
+      "n_skipped": 0,
+      "output": "D:\\apex-rca\\results\\full_audit1.csv",
+      "summary": {
+        "n_evaluated": 20,
+        "hit1": {
+          "mean": 0.9,
+          "ci95_low": 0.75,
+          "ci95_high": 1.0
+        },
+        "hit3": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "hit5": {
+          "mean": 1.0,
+          "ci95_low": 1.0,
+          "ci95_high": 1.0
+        },
+        "mrr": {
+          "mean": 0.9416666666666667,
+          "ci95_low": 0.85,
+          "ci95_high": 1.0
+        },
+        "by": {
+          "suite": [
+            {
+              "group": "RE1",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "system": [
+            {
+              "group": "Online Boutique",
+              "n": 20,
+              "hit1": 0.9,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.9416666666666667
+            }
+          ],
+          "fault": [
+            {
+              "group": "cpu",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "delay",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "disk",
+              "n": 5,
+              "hit1": 1.0,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 1.0
+            },
+            {
+              "group": "loss",
+              "n": 5,
+              "hit1": 0.6,
+              "hit3": 1.0,
+              "hit5": 1.0,
+              "mrr": 0.7666666666666667
+            }
+          ]
+        }
+      }
+    }
+  },
+  "mcnemar_hit1_anomaly_vs_graph": {
+    "n_paired": 20,
+    "a_correct_b_wrong": 0,
+    "a_wrong_b_correct": 0,
+    "pvalue": 1.0
+  },
+  "mcnemar_hit1_anomaly_vs_full": {
+    "n_paired": 20,
+    "a_correct_b_wrong": 0,
+    "a_wrong_b_correct": 0,
+    "pvalue": 1.0
+  }
+}

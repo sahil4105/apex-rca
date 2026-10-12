@@ -1,0 +1,118 @@
+{
+  "seed": 42,
+  "reports": {
+    "degree_preserving": {
+      "source": "results\\graph_control_paired_cases.csv",
+      "n_eligible_cases": 365,
+      "condition_a": "real_graph",
+      "condition_b": "shuffled_graph",
+      "comparisons_holm": [
+        {
+          "metric": "hit1",
+          "n_paired": 365,
+          "delta_mean_b_minus_a": -0.01547945205479452,
+          "ci95_low": -0.02781164383561644,
+          "ci95_high": -0.0038356164383561665,
+          "pvalue": 1.4551915228366852e-11,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 37,
+          "a_wrong_b_correct": 0,
+          "pvalue_holm": 5.820766091346741e-11
+        },
+        {
+          "metric": "hit3",
+          "n_paired": 365,
+          "delta_mean_b_minus_a": 0.001232876712328768,
+          "ci95_low": -0.0064383561643835616,
+          "ci95_high": 0.009452054794520548,
+          "pvalue": 0.0009765625,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 11,
+          "a_wrong_b_correct": 0,
+          "pvalue_holm": 0.0029296875
+        },
+        {
+          "metric": "hit5",
+          "n_paired": 365,
+          "delta_mean_b_minus_a": 0.0035616438356164386,
+          "ci95_low": -0.00452054794520548,
+          "ci95_high": 0.01137328767123286,
+          "pvalue": 0.015625,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 7,
+          "a_wrong_b_correct": 0,
+          "pvalue_holm": 0.01646269466165803
+        },
+        {
+          "metric": "mrr",
+          "n_paired": 365,
+          "delta_mean_b_minus_a": -0.00725425495730148,
+          "ci95_low": -0.01441630637407386,
+          "ci95_high": -0.0007401833652670521,
+          "pvalue": 0.008231347330829015,
+          "test": "wilcoxon_signed_rank",
+          "a_correct_b_wrong": null,
+          "a_wrong_b_correct": null,
+          "pvalue_holm": 0.01646269466165803
+        }
+      ]
+    },
+    "unconstrained_random": {
+      "source": "results\\graph_control_random_paired_cases.csv",
+      "n_eligible_cases": 608,
+      "condition_a": "real_graph",
+      "condition_b": "random_graph",
+      "comparisons_holm": [
+        {
+          "metric": "hit1",
+          "n_paired": 608,
+          "delta_mean_b_minus_a": -0.0665296052631579,
+          "ci95_low": -0.08610402960526317,
+          "ci95_high": -0.04802425986842107,
+          "pvalue": 3.132182327458831e-41,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 147,
+          "a_wrong_b_correct": 2,
+          "pvalue_holm": 1.2528729309835324e-40
+        },
+        {
+          "metric": "hit3",
+          "n_paired": 608,
+          "delta_mean_b_minus_a": -0.01069078947368421,
+          "ci95_low": -0.019983552631578947,
+          "ci95_high": -0.002300575657894747,
+          "pvalue": 3.637978807091713e-12,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 39,
+          "a_wrong_b_correct": 0,
+          "pvalue_holm": 7.275957614183426e-12
+        },
+        {
+          "metric": "hit5",
+          "n_paired": 608,
+          "delta_mean_b_minus_a": -0.0027138157894736844,
+          "ci95_low": -0.009703947368421053,
+          "ci95_high": 0.003947368421052631,
+          "pvalue": 6.103515625e-05,
+          "test": "mcnemar_exact",
+          "a_correct_b_wrong": 15,
+          "a_wrong_b_correct": 0,
+          "pvalue_holm": 6.103515625e-05
+        },
+        {
+          "metric": "mrr",
+          "n_paired": 608,
+          "delta_mean_b_minus_a": -0.039078460845544206,
+          "ci95_low": -0.04999814231238762,
+          "ci95_high": -0.02844856833821971,
+          "pvalue": 1.7564525960828959e-15,
+          "test": "wilcoxon_signed_rank",
+          "a_correct_b_wrong": null,
+          "a_wrong_b_correct": null,
+          "pvalue_holm": 5.2693577882486875e-15
+        }
+      ]
+    }
+  },
+  "note": "Randomized repetitions are averaged within case before paired inference; they are not treated as independent cases."
+}

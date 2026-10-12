@@ -1,0 +1,9 @@
+case,method,reason
+re1ob_currencyservice_loss_1,anomaly_only,"inject_time outside recorded [time_start, time_end] window"
+re1ob_currencyservice_loss_1,metrics_graph,"inject_time outside recorded [time_start, time_end] window"
+re1ob_currencyservice_loss_1,metrics_logs_traces,"inject_time outside recorded [time_start, time_end] window"
+re1ob_currencyservice_loss_1,full,"inject_time outside recorded [time_start, time_end] window"
+re1ob_productcatalogservice_cpu_3,anomaly_only,"inject_time outside recorded [time_start, time_end] window"
+re1ob_productcatalogservice_cpu_3,metrics_graph,"inject_time outside recorded [time_start, time_end] window"
+re1ob_productcatalogservice_cpu_3,metrics_logs_traces,"inject_time outside recorded [time_start, time_end] window"
+re1ob_productcatalogservice_cpu_3,full,"inject_time outside recorded [time_start, time_end] window"

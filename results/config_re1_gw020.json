@@ -1,0 +1,17 @@
+{
+  "name": "rcaeval_re1_gw020",
+  "version": "apex_rca_v1",
+  "data_dir": "D:\\apex-rca\\data\\rcaeval",
+  "results_dir": "D:\\apex-rca\\results",
+  "min_window_samples": 30,
+  "anomaly_effect_cap": 20.0,
+  "top_k_metrics": 3,
+  "graph_weight": 0.2,
+  "extra_weight": 0.25,
+  "pagerank_damping": 0.85,
+  "min_trace_edge_count": 3,
+  "graph_mode": "auto",
+  "seed": 42,
+  "task": "retrospective_post_injection_diagnosis",
+  "created_at_utc": "2026-10-11T17:28:00+00:00"
+}

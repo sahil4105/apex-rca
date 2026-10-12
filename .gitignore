@@ -1,0 +1,43 @@
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE-specific files
+.idea/
+
+# Local datasets and large archives
+data/
+external/OpenRCA/
+
+# Research results are part of the shared project
+# Keep generated Python caches and temporary files excluded
+
+# Local backups and temporary files
+*.bak
+*.backup
+*.tmp
+app.py.backup_before_dashboard
+
+# Secrets and local environment settings
+.env
+.env.*
+!.env.example
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Python bytecode and cache directories
+**/__pycache__/
+
+# Old source backup
+apex_rca/evaluation.py.bak
+
+/src/
+/main.py
