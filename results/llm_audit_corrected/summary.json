@@ -1,0 +1,157 @@
+{
+  "source_csv": "results\\llm_evaluation\\llm_per_incident_results.csv",
+  "historical_artifacts_preserved": true,
+  "analysis_type": "Corrected audit of historical LLM evaluation using recorded case-level rows only.",
+  "reporting_rules": [
+    "Live LLM and fallback rows are separated before computing accuracy.",
+    "Accuracy is reported with sample sizes.",
+    "The same 30 incidents appear in every condition; no condition uses a different incident subset.",
+    "Oracle control is explicitly labelled as evaluation-only and is not mixed with live-only accuracy."
+  ],
+  "all_conditions": {
+    "baseline_raw_logs": {
+      "setting": "baseline_raw_logs",
+      "total_cases": 30,
+      "live_llm_cases": 9,
+      "fallback_cases": 21,
+      "overall_accuracy": 0.4,
+      "live_llm_accuracy": 0.8889,
+      "fallback_accuracy": 0.1905,
+      "live_correct": 8,
+      "fallback_correct": 4
+    },
+    "method_anomaly_only": {
+      "setting": "method_anomaly_only",
+      "total_cases": 30,
+      "live_llm_cases": 16,
+      "fallback_cases": 14,
+      "overall_accuracy": 0.4,
+      "live_llm_accuracy": 0.75,
+      "fallback_accuracy": 0.0,
+      "live_correct": 12,
+      "fallback_correct": 0
+    },
+    "proposed_topology_anomaly": {
+      "setting": "proposed_topology_anomaly",
+      "total_cases": 30,
+      "live_llm_cases": 14,
+      "fallback_cases": 16,
+      "overall_accuracy": 0.3667,
+      "live_llm_accuracy": 0.7857,
+      "fallback_accuracy": 0.0,
+      "live_correct": 11,
+      "fallback_correct": 0
+    },
+    "ranking_oracle_control": {
+      "setting": "ranking_oracle_control",
+      "total_cases": 30,
+      "live_llm_cases": 14,
+      "fallback_cases": 16,
+      "overall_accuracy": 0.3667,
+      "live_llm_accuracy": 0.7857,
+      "fallback_accuracy": 0.0,
+      "live_correct": 11,
+      "fallback_correct": 0
+    },
+    "ranking_top1_evidence": {
+      "setting": "ranking_top1_evidence",
+      "total_cases": 30,
+      "live_llm_cases": 15,
+      "fallback_cases": 15,
+      "overall_accuracy": 0.3333,
+      "live_llm_accuracy": 0.6667,
+      "fallback_accuracy": 0.0,
+      "live_correct": 10,
+      "fallback_correct": 0
+    }
+  },
+  "live_llm_vs_fallback_overview": {
+    "total_unique_incidents": 30,
+    "total_rows": 150,
+    "total_fallback_rows": 82,
+    "total_live_rows": 68
+  },
+  "incident_overlap": {
+    "setting_pairs": [
+      {
+        "setting_a": "baseline_raw_logs",
+        "setting_b": "method_anomaly_only",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "baseline_raw_logs",
+        "setting_b": "proposed_topology_anomaly",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "baseline_raw_logs",
+        "setting_b": "ranking_oracle_control",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "baseline_raw_logs",
+        "setting_b": "ranking_top1_evidence",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "method_anomaly_only",
+        "setting_b": "proposed_topology_anomaly",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "method_anomaly_only",
+        "setting_b": "ranking_oracle_control",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "method_anomaly_only",
+        "setting_b": "ranking_top1_evidence",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "proposed_topology_anomaly",
+        "setting_b": "ranking_oracle_control",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "proposed_topology_anomaly",
+        "setting_b": "ranking_top1_evidence",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      },
+      {
+        "setting_a": "ranking_oracle_control",
+        "setting_b": "ranking_top1_evidence",
+        "shared_incidents": 30,
+        "total_union": 30,
+        "identical_case_set": true
+      }
+    ],
+    "all_conditions_same_incidents": true
+  },
+  "failure_breakdown": {
+    "failure_reason_field_available": false,
+    "failure_reason_field_names": [],
+    "recorded_failure_categories": "unavailable",
+    "fallback_rows": 82,
+    "live_rows": 68,
+    "note": "The historical CSV does not record a dedicated failure reason or API-error category; fallback rows are therefore represented as fallback_used=1, with no per-row cause captured."
+  }
+}

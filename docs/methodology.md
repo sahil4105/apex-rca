@@ -85,3 +85,24 @@ independent cases.
 ## Hyperparameters
 
 `graph_weight`, `extra_weight`, PageRank damping, and minimum trace-edge count are documented defaults. They were not nested-cross-validated on RCAEval because the public benchmark is commonly used as a whole. That is a limitation: these values could overfit if later tuned on the same labels.
+
+## LLM Grounding and Diagnosis Methodology
+
+The dissertation research questions assess:
+1. **Evidence Grounding:** Does topology-and-anomaly-grounded evidence selection improve LLM root-cause identification over raw-log prompting?
+2. **Error Propagation:** How do upstream ranking errors propagate into downstream LLM diagnosis?
+
+### Experimental Conditions
+- **Baseline A (Raw-Log Prompting):** The LLM is provided with raw log lines filtered to an window around the injection timestamp $[t_{\\text{inject}} - 60s, t_{\\text{inject}} + 120s]$ with error-pattern priority and fixed truncation (50 lines), alongside the candidate services.
+- **Method B (Anomaly-Grounded Evidence):** The LLM is provided with structured metric effect sizes and log/trace anomalies, but without topology edges or dependency relations.
+- **Proposed Method C (Topology-and-Anomaly-Grounded Evidence):** The LLM is provided with a full structured evidence package including metric anomalies, log/trace evidence, and dependency topology (callers, callees, and Personalized PageRank centrality).
+- **Ranking Propagation Conditions:**
+  - *Top-1 vs. Top-3:* Evaluating whether providing runner-up candidates allows the model to resolve upstream ranking ambiguity.
+  - *Oracle Candidate Control:* An evaluation-only control ensuring the ground-truth service is present in the candidate prompt, isolating model reasoning capacity from upstream candidate recall starvation.
+
+### Quantitative Validation Metrics
+- **Root-Cause Accuracy:** Exact match of predicted root cause with ground truth.
+- **Citation Validity Ratio:** The proportion of cited evidence IDs that exist in the prompt evidence package.
+- **Unsupported Claim Ratio:** Claims lacking valid citations.
+- **Invalid Report Rate:** Fraction of outputs failing JSON schema constraints.
+

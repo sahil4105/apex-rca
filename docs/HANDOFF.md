@@ -15,6 +15,10 @@ APEX-RCA evaluates topology-grounded root-cause identification for microservices
 - Canonical incident representation and scoring modules implemented.
 - Tests added for canonical scoring and Telecom adapter behavior.
 - Reproducibility manifest updated.
+- LLM incident diagnosis integration implemented (`llm_evidence.py`, `llm_report.py`, `llm_client.py`, `llm_validation.py`).
+- 30-case comparative evaluation across Baseline A, Method B, Proposed Method C, and ranking-error propagation implemented in `experiments/run_llm_experiments.py`.
+- Unit tests added in `tests/test_llm_*.py` (mocked, offline).
+- Streamlit LLM Diagnosis tab integrated into `app.py`.
 
 ## Main RCAEval full-run results
 
