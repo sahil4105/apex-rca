@@ -195,7 +195,28 @@ The Bank and Telecom evaluators use the dataset layout described in Section 4.2:
 .\.venv\Scripts\python.exe experiments\evaluate_openrca_telecom.py
 ```
 
-Check each script's `--help` output if you need to change its options. Do not overwrite the saved primary outputs without backing them up or selecting a supported new output name.
+### LLM root-cause diagnosis experiments
+
+Configure your Groq API credentials in `.env`:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=openai/gpt-oss-20b
+```
+
+Run a 1-case smoke test across all conditions:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\run_llm_experiments.py --smoke
+```
+
+Run the 30-case comparative evaluation (Baseline A, Method B, Proposed Method C, Top-1, Oracle control):
+
+```powershell
+.\.venv\Scripts\python.exe experiments\run_llm_experiments.py --limit 30 --delay 0.5
+```
+
+Outputs are saved under `results/llm_evaluation/`.
 
 ## 8. Results and evaluation
 

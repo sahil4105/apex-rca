@@ -29,5 +29,9 @@ apex_rca.data_loader   → metrics, optional logs/traces
 | `evaluation.py` | Hit@k, MRR, bootstrap CI, McNemar |
 | `pipeline.py` | Single-case orchestration for all methods |
 | `evidence.py` | Explanations from computed scores only |
+| `llm_evidence.py` | Structured evidence selection and packaging with stable IDs |
+| `llm_report.py` | Pydantic/dataclass structured JSON incident reports and schema |
+| `llm_client.py` | Groq SDK client wrapper with deterministic baseline fallback |
+| `llm_validation.py` | Citation verification, hallucination audit, and report validation |
 
 The PyCharm template `main.py` is unused.

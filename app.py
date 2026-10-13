@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -10,6 +10,9 @@ import streamlit as st
 
 from apex_rca.config import ExperimentConfig, default_rcaeval_dir
 from apex_rca.data_loader import load_case, load_index
+from apex_rca.llm_client import generate_incident_diagnosis, get_groq_client
+from apex_rca.llm_evidence import build_evidence_package
+from apex_rca.llm_validation import validate_report
 from apex_rca.metric_parsing import service_metric_columns
 from apex_rca.pipeline import diagnose_case
 
@@ -253,6 +256,35 @@ def show_overview(index: pd.DataFrame) -> None:
                 use_container_width=True,
             )
 
+    llm_summary_file = RESULTS / "llm_evaluation" / "llm_summary.json"
+    if llm_summary_file.exists():
+        st.subheader("LLM Root-Cause Diagnosis Evaluation")
+        st.caption(
+            "Evaluation across Raw-Log prompting, Anomaly-Only, and Topology-Grounded evidence."
+        )
+        llm_sum = cached_json(str(llm_summary_file), llm_summary_file.stat().st_mtime)
+        llm_rows = []
+        labels = {
+            "baseline_raw_logs": "Baseline A (Raw Logs)",
+            "method_anomaly_only": "Method B (Anomaly-Only)",
+            "proposed_topology_anomaly": "Proposed Method C (Topology + Anomaly)",
+            "ranking_top1_evidence": "Top-1 Evidence Only",
+            "ranking_oracle_control": "Oracle Candidate Control (Eval-Only)",
+        }
+        for k, name in labels.items():
+            if k in llm_sum:
+                d = llm_sum[k]
+                llm_rows.append({
+                    "Condition": name,
+                    "Cases": d.get("sample_size"),
+                    "Diagnosis Accuracy": f"{d.get('accuracy', 0.0)*100:.1f}%",
+                    "Valid Citation %": f"{d.get('mean_citation_validity', 0.0)*100:.1f}%",
+                    "Unsupported Claims %": f"{d.get('mean_unsupported_claim_ratio', 0.0)*100:.1f}%",
+                    "Mean Latency": f"{d.get('mean_latency_s', 0.0):.2f}s",
+                })
+        if llm_rows:
+            st.dataframe(pd.DataFrame(llm_rows), hide_index=True, use_container_width=True)
+
     with st.expander("Interpretation and limitations"):
         st.markdown(
             """
@@ -353,8 +385,8 @@ def show_diagnosis(index: pd.DataFrame) -> None:
     if full.skip_reason:
         st.warning(f"Full method unavailable: {full.skip_reason}")
 
-    tab_rank, tab_evidence, tab_telemetry, tab_raw = st.tabs(
-        ["Rankings", "Evidence", "Telemetry", "Raw data"]
+    tab_rank, tab_evidence, tab_llm, tab_telemetry, tab_raw = st.tabs(
+        ["Rankings", "Evidence", "LLM Diagnosis", "Telemetry", "Raw data"]
     )
 
     with tab_rank:
@@ -419,6 +451,113 @@ def show_diagnosis(index: pd.DataFrame) -> None:
         st.caption(
             "Evidence summaries support investigation; they are not causal proof."
         )
+
+    with tab_llm:
+        st.subheader("LLM Root-Cause Incident Diagnosis")
+        st.caption(
+            "Synthesizes selected telemetry evidence into a validated JSON incident report. "
+            "Reuses upstream rankings and deterministic evidence."
+        )
+
+        c1, c2, c3 = st.columns([2, 1, 1])
+        with c1:
+            method_variant = st.selectbox(
+                "Evidence Grounding Mode",
+                [
+                    ("Proposed: Topology + Anomaly", "topology_anomaly"),
+                    ("Method B: Anomaly-Only (No Graph)", "anomaly_only"),
+                    ("Baseline A: Raw Logs", "raw_logs"),
+                ],
+                format_func=lambda x: x[0],
+                key=f"llm_variant_{case_id}",
+            )[1]
+        with c2:
+            candidate_k = st.selectbox(
+                "Candidate Set",
+                [3, 1],
+                format_func=lambda k: f"Top-{k} Candidates",
+                key=f"llm_k_{case_id}",
+            )
+        with c3:
+            st.write("")
+            st.write("")
+            generate_clicked = st.button("Generate Report", key=f"btn_gen_{case_id}")
+
+        cache_key = f"report_{case_id}_{method_variant}_{candidate_k}"
+        upstream_diag = full if not full.skip_reason else graph
+
+        if generate_clicked or cache_key in st.session_state:
+            if generate_clicked:
+                with st.spinner("Analyzing telemetry evidence and generating diagnosis..."):
+                    client = get_groq_client()
+                    package = build_evidence_package(
+                        bundle,
+                        upstream_diag,
+                        method_variant=method_variant,  # type: ignore[arg-type]
+                        candidate_k=candidate_k,
+                    )
+                    report, meta = generate_incident_diagnosis(
+                        package,
+                        client=client,
+                        deterministic_fallback_explanations=upstream_diag.extras.get("explanations", []),
+                    )
+                    audit = validate_report(report, package)
+                    st.session_state[cache_key] = (report, meta, audit, package)
+
+            report, meta, audit, package = st.session_state[cache_key]
+
+            if meta.get("fallback_used"):
+                st.warning(f"Deterministic Fallback Active: {meta.get('error', 'API unavailable')}")
+            else:
+                st.success(f"Generated via `{meta.get('model')}` in {meta.get('latency_s', 0.0):.2f}s")
+
+            v_col1, v_col2, v_col3 = st.columns(3)
+            with v_col1:
+                st.metric("Suspected Root Cause", report.suspected_root_cause)
+            with v_col2:
+                st.metric("Confidence", report.confidence.upper())
+            with v_col3:
+                st.metric("Suspected Fault Type", report.possible_fault_type or "Unspecified")
+
+            st.write(f"**Reasoning Summary:** {report.reasoning_summary}")
+
+            st.markdown("##### Evidence Grounding & Validation Audit")
+            aud_c1, aud_c2, aud_c3, aud_c4 = st.columns(4)
+            aud_c1.metric("Structure Valid", "Yes" if audit.is_valid_structure else "No")
+            aud_c2.metric("In Candidate Set", "Yes" if audit.is_valid_candidate else "No")
+            aud_c3.metric("Citation Validity", f"{audit.citation_validity_ratio * 100:.1f}%")
+            aud_c4.metric("Unsupported Claims", str(audit.unsupported_claim_count))
+
+            if audit.warnings:
+                for w in audit.warnings:
+                    st.warning(f"Validation Warning: {w}")
+
+            st.markdown("##### Supporting Claims & Telemetry Citations")
+            for idx, claim in enumerate(report.supporting_claims):
+                cites = ", ".join(f"`{cid}`" for cid in claim.evidence_ids) if claim.evidence_ids else "None"
+                st.markdown(f"- **Claim {idx+1}:** {claim.claim_text} *(Cites: {cites})*")
+
+            exp_c1, exp_c2 = st.columns(2)
+            with exp_c1:
+                st.markdown("##### Alternative Candidates")
+                if report.alternative_candidates:
+                    for alt in report.alternative_candidates:
+                        st.markdown(f"- **{alt.service}:** {alt.rationale}")
+                else:
+                    st.caption("No alternative candidates analyzed.")
+
+            with exp_c2:
+                st.markdown("##### Contradictions & Limitations")
+                for c in report.contradictory_evidence:
+                    st.markdown(f"- *Contradiction:* {c}")
+                for u in report.uncertainty_and_limitations:
+                    st.markdown(f"- *Uncertainty:* {u}")
+
+            with st.expander("Inspected Evidence Package Sent to Model"):
+                st.text(package.format_for_prompt())
+
+        else:
+            st.info("Click 'Generate Report' to execute or view the grounded LLM diagnosis for this case.")
 
     with tab_telemetry:
         st.subheader("Metric telemetry")
