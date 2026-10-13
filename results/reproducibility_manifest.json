@@ -2,14 +2,14 @@
   {
     "file": "apex_rca/config.py",
     "status": "present",
-    "sha256": "cc76547710b20babe73fb7431c09ba36fc6385144ccc0e48a9dc05626ed85840",
-    "bytes": 2045
+    "sha256": "6fed4e3b745e5f68a828448514a1feef4690cfc78d409de193362ef0d9b60703",
+    "bytes": 2176
   },
   {
     "file": "apex_rca/pipeline.py",
     "status": "present",
-    "sha256": "b8a194c6bc9003ea57c9420b119375953910a313b539666b1b4b762c6ea3a620",
-    "bytes": 9253
+    "sha256": "292c01070753bb1694011430965480c0f6fcf6d760bcd522bef22aab6e986206",
+    "bytes": 9918
   },
   {
     "file": "apex_rca/ranking.py",
@@ -20,14 +20,14 @@
   {
     "file": "apex_rca/evaluation.py",
     "status": "present",
-    "sha256": "78846a7e23054c882929c01805b7435c0ada1be661e0e0b82281ca032000fa32",
-    "bytes": 3746
+    "sha256": "76b042d50d77426b162ac7bb5aee61bc78f8bb333e6c4cc3f40c93ed785eee33",
+    "bytes": 14087
   },
   {
     "file": "experiments/run_rcaeval.py",
     "status": "present",
-    "sha256": "8283ef101ed27aa73c84bbb72f230811e2205758cfacefe5ae07d450e2b118fd",
-    "bytes": 7721
+    "sha256": "7da7409d91349147f7dd83eca3088d20738a20882f363659dbd62dc0e778b07f",
+    "bytes": 9572
   },
   {
     "file": "experiments/run_zscore_baseline.py",
@@ -112,5 +112,107 @@
     "status": "present",
     "sha256": "46fbdbcdaac60bf7128f178e97bff1948e3b53763fdb2be7d8893695f7c089e6",
     "bytes": 59221
+  },
+  {
+    "file": "apex_rca/canonical.py",
+    "status": "present",
+    "sha256": "dc5d96e81541e65ffd653aea8bba70579cd4053e5d15d02d173f36b5a6476b52",
+    "bytes": 7991
+  },
+  {
+    "file": "apex_rca/canonical_scoring.py",
+    "status": "present",
+    "sha256": "2c61d1dc6610abf76d9c47e45c38e8e63ce5767e331e4962c3cec5a72c2b9632",
+    "bytes": 5488
+  },
+  {
+    "file": "apex_rca/bank_adapter.py",
+    "status": "present",
+    "sha256": "644d55576cfaed101306eace63080f15a8b0bbcf02c3a3a9175d8a4c2775cf62",
+    "bytes": 4399
+  },
+  {
+    "file": "apex_rca/telecom_adapter.py",
+    "status": "present",
+    "sha256": "0185b67007477e32443b41c5487d041b0eaaf5504add68f8f01a08735ab99b08",
+    "bytes": 6858
+  },
+  {
+    "file": "experiments/evaluate_openrca_bank.py",
+    "status": "present",
+    "sha256": "476692928668b4ff6c64b6caaaf97e6019030f5b1c224d71fd5a40bf29297ebd",
+    "bytes": 6099
+  },
+  {
+    "file": "experiments/evaluate_openrca_telecom.py",
+    "status": "present",
+    "sha256": "4c831c3fb75e58c751647de5d5774d2ca0b5b906b33efa9e9c466b0b6a307e6e",
+    "bytes": 7472
+  },
+  {
+    "file": "tests/test_canonical.py",
+    "status": "present",
+    "sha256": "6c1d762ef70ad526a50531661c9cba7c582bb0d71470eee56e5866d0e3a8b701",
+    "bytes": 5899
+  },
+  {
+    "file": "tests/test_canonical_scoring.py",
+    "status": "present",
+    "sha256": "b6df71288cde8a9b6353debf9ab7be203961136f50ea2b34a1a637f2e8e28b52",
+    "bytes": 4345
+  },
+  {
+    "file": "tests/test_telecom_adapter.py",
+    "status": "present",
+    "sha256": "5a21a241c0a3049589dbedf2997604cf16a13878b90fab93105942dd56d756c5",
+    "bytes": 1664
+  },
+  {
+    "file": "results/bank_canonical_v1_summary.json",
+    "status": "present",
+    "sha256": "02641508979a68cc643a90c0bdd67b4a74c247ee92fc34853da73a1867a4bf30",
+    "bytes": 841
+  },
+  {
+    "file": "results/bank_canonical_v1_per_incident.csv",
+    "status": "present",
+    "sha256": "7b35099a716f29ba3137f6d82130e85443d383fae3184c167438b7fd59fe515f",
+    "bytes": 14696
+  },
+  {
+    "file": "results/telecom_canonical_v2_summary.json",
+    "status": "present",
+    "sha256": "11c554fe1cb23efa795aee685f10525ffdd4b098f79f88335defb851b1c6985e",
+    "bytes": 1070
+  },
+  {
+    "file": "results/telecom_canonical_v2_per_incident.csv",
+    "status": "present",
+    "sha256": "9f240a523135f360fbe8519849e33edd58354943c936adf0d4414d3d0214b270",
+    "bytes": 8655
+  },
+  {
+    "file": "results/telecom_sensitivity_5_summary.json",
+    "status": "present",
+    "sha256": "1b62a1cab216c1af6f66ba8d3b02b89c3532206409863b8daf8234d0a2da98dc",
+    "bytes": 998
+  },
+  {
+    "file": "results/telecom_sensitivity_5_per_incident.csv",
+    "status": "present",
+    "sha256": "ff9266c4774f45bd3e92cffa019001b4196e6e4f91631d44063e13299d309a33",
+    "bytes": 8694
+  },
+  {
+    "file": "results/telecom_sensitivity_30_summary.json",
+    "status": "present",
+    "sha256": "7038a2223a77a3ae28677c8314eb2877847d37d3822070aa6928796202decd04",
+    "bytes": 1034
+  },
+  {
+    "file": "results/telecom_sensitivity_30_per_incident.csv",
+    "status": "present",
+    "sha256": "3a2d25f2a41604a76d74e5cd1b06172effb04e8c39ea5b1a8f447da98abe945c",
+    "bytes": 8264
   }
 ]

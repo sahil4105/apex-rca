@@ -2,19 +2,21 @@
 
 **A Topology-Grounded Root Cause Analysis Pipeline for Microservices Using Dependency Graphs and Telemetry Data**
 
-APEX-RCA investigates whether service dependency information improves telemetry-based root-cause identification compared with anomaly-only ranking, and whether logs and traces provide additional value.
+APEX-RCA studies whether service-dependency information improves telemetry-based root-cause identification compared with anomaly-only ranking, and whether logs and traces add further value.
 
-The project includes a Python ranking pipeline, RCAEval experiments, statistical evaluation, unit tests and a local Streamlit dashboard.
+The project includes a Python ranking pipeline, benchmark experiments, statistical analysis, tests, and a local Streamlit dashboard. It is a retrospective research tool, not a production monitoring or automated remediation platform.
 
 ## 1. Project status and scope
 
-- **Primary benchmark:** RCAEval, covering 735 failure cases across three benchmark suites.
+- **Primary benchmark:** RCAEval, with 735 indexed failure cases across RE1, RE2, and RE3.
 - **Task:** Retrospective root-cause diagnosis using the recorded fault-injection timestamp.
 - **Main comparison:** Anomaly-only ranking versus dependency-graph-aware ranking.
 - **Additional comparison:** The contribution of logs and traces.
+- **Additional validation:** OpenRCA Bank and Telecom, evaluated separately from RCAEval.
 - **Dashboard:** A local interface for inspecting saved results and incident evidence.
+- **Saved outputs:** Per-incident CSVs, summary JSON files, sensitivity analyses, and statistical reports are stored under `results/`.
 
-The repository includes baseline code and previously generated results. Re-running experiments may overwrite existing output files, so preserve important results before running new configurations.
+Existing results are committed research artifacts; their presence does not mean a new collaborator has independently reproduced them. Some experiment commands can overwrite outputs. Use a new tag where supported, and back up important artifacts before rerunning experiments.
 
 ## 2. Prerequisites
 
@@ -23,108 +25,102 @@ For Windows:
 - Git
 - Python 3.13
 - PyCharm or another Python IDE (optional)
-- Internet access to download datasets
-- Several GB of free disk space for RCAEval; additional space is needed for extracted files and generated outputs
+- Internet access to obtain datasets
+- Several GB of free disk space for RCAEval, plus space for working data and generated outputs
 
-Open PowerShell in the directory where you want to keep the project.
+Run the following commands from PowerShell at the repository root unless stated otherwise.
 
 ## 3. Clone and install
-
-Clone the repository:
 
 ```powershell
 git clone https://github.com/sahil4105/apex-rca.git
 cd apex-rca
-```
-
-Create and activate a virtual environment:
-
-```powershell
 py -3.13 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-Install the dependencies:
-
-```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-If PowerShell cannot activate the virtual environment, you can run the project interpreter directly:
+If activation is blocked or inconvenient, call the project interpreter directly:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## 4. Obtain the datasets
+## 4. Datasets
 
-Datasets are **not stored in this Git repository**. Each collaborator must download the required data separately.
+Datasets are not stored in the ordinary Git repository. Downloaded data belongs under `data/`, which is ignored by Git. Follow the dataset owners' instructions and licensing terms; do not commit raw archives or extracted telemetry.
 
-### 4.1 RCAEval — required for the main experiments
+### 4.1 RCAEval — primary benchmark
 
 Official sources:
 
-- Hugging Face: https://huggingface.co/datasets/phamquiluan/RCAEval
-- Official code and documentation: https://github.com/phamquiluan/RCAEval
+- Dataset: https://huggingface.co/datasets/phamquiluan/RCAEval
+- Code and documentation: https://github.com/phamquiluan/RCAEval
 
-RCAEval contains 735 failure cases across the RE1, RE2 and RE3 suites. The Hugging Face version uses Parquet files and is approximately 3.4 GB.
+The project has indexed 735 failure cases across RE1, RE2, and RE3. The downloaded dataset is several GB, depending on the files and local representation.
 
-From the project root, run the project's dataset preparation script:
+From the repository root, run the preparation workflow:
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\prepare_dataset.py
 ```
 
-The project expects the prepared dataset under:
-
-```text
-data/
-└── rcaeval/
-```
-
-The script is the first option to try because it belongs to this project's preparation workflow. Consult the script and its output if the download fails or the resulting directory differs from the expected layout.
-
-**Manual download fallback:** The official Hugging Face dataset documents downloading with `huggingface_hub`. To download the full dataset directly into the expected directory:
+The project expects prepared data under `data/rcaeval/`. Inspect the script output and resulting layout before running experiments. If you download the dataset manually, the Hugging Face repository can be fetched with:
 
 ```powershell
 .\.venv\Scripts\python.exe -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='phamquiluan/RCAEval', repo_type='dataset', local_dir='data/rcaeval')"
 ```
 
-This downloads the repository's dataset files, including its case index. It does not guarantee that the resulting layout matches every assumption in the APEX-RCA preparation code, so verify the directory structure before running experiments.
+A direct snapshot download does not guarantee that every local layout assumption in the project preparation code has been met. Verify the prepared structure before running a benchmark.
 
-For a fresh installation, do not assume the existing local dataset is present just because the code and result files are available on GitHub.
+### 4.2 OpenRCA — additional validation
 
-### 4.2 OpenRCA — optional additional validation
+Official repository and dataset instructions:
 
-Official repository:
+- https://github.com/microsoft/OpenRCA
 
-https://github.com/microsoft/OpenRCA
-
-OpenRCA provides additional telemetry data for systems including Bank, Telecom and Market. The official repository explains how to obtain the telemetry archives through its linked Google Drive resources.
-
-Follow the official repository's dataset instructions and place the downloaded files in the structure expected by OpenRCA. A typical layout contains:
+The current OpenRCA evaluation scripts expect the prepared dataset under:
 
 ```text
-dataset/
-├── Bank/
-│   ├── query.csv
-│   ├── record.csv
-│   └── telemetry/
-├── Telecom/
-│   ├── query.csv
-│   ├── record.csv
-│   └── telemetry/
-└── Market/
+data/
+└── openrca/
+    └── processed/
+        ├── Bank/
+        │   ├── query.csv
+        │   ├── record.csv
+        │   └── telemetry/
+        │       └── <date>/
+        │           └── metric/
+        └── Telecom/
+            ├── query.csv
+            ├── record.csv
+            └── telemetry/
+                └── <date>/
+                    └── metric/
 ```
 
-**OpenRCA is optional.** The primary RCAEval experiments do not require it. Download it only when working on the additional validation workflow, and confirm query-to-record alignment before interpreting results.
+The `processed/` layout is important. In particular, the Telecom adapter expects `telemetry/<date>/metric/`; the `processed_curated/` preparation output uses a different metric-folder layout and must not be substituted without changing and testing the adapter.
 
-Do not upload dataset archives, extracted telemetry, or private data to this repository.
+The preparation script creates `data/openrca/processed_curated/` and writes an audit report and inventories. It copies and hash-verifies the selected metric files, but it can be slow because it reads large CSVs to count rows. If it is interrupted, do not assume the preparation completed. Inspect its output and validate required files before using the curated folder.
+
+```powershell
+.\.venv\Scripts\python.exe experiments\prepare_openrca_bank_telecom.py
+```
+
+#### Bank metric cache
+
+The Bank evaluator reads `record.csv` from the processed Bank directory and loads metric observations from `results/bank_metric_cache/`. This cache is a generated evaluation artifact; the current cache is small enough to keep with the research results. To rebuild it from the processed Bank telemetry, first ensure the cache directory does not already contain files, because the script intentionally refuses to overwrite existing cache files:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\build_bank_metric_cache.py
+```
+
+Do not delete the source processed dataset if you may need to rebuild the cache.
 
 ## 5. Verify the installation
 
-Run the test suite:
+Run the unit tests:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
@@ -136,35 +132,33 @@ Import-check the dashboard:
 .\.venv\Scripts\python.exe -c "import app; print('app import: OK')"
 ```
 
-These checks verify the unit tests and basic application import. They do not replace a full experiment run or manual dashboard testing.
+These checks verify the test suite and basic application import. They do not replace a full experiment run or manual dashboard testing. Record the actual output from your machine; do not rely on an earlier reported test count.
 
 ## 6. Run the dashboard
-
-Start Streamlit:
 
 ```powershell
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
-Open the local URL printed in the terminal.
+Open the local URL printed by Streamlit.
 
-The dashboard displays saved experiment results and incident information. It is a research inspection tool, not a production monitoring system. Missing telemetry should not be interpreted as evidence that a service is healthy.
+The dashboard is for research inspection of saved results and incident evidence. It is not a live monitoring service, an incident-management system, or an automatic remediation tool. Missing telemetry must not be interpreted as proof that a service is healthy.
 
 ## 7. Run experiments
 
-Run commands from the repository root.
+Run commands from the repository root. Inspect each script's arguments and output paths before execution.
 
-### Original anomaly-only baseline
+### RCAEval baseline
 
-This command may overwrite the original baseline CSV, so preserve the existing artifact first if you need to retain it.
+This may overwrite the baseline output. Back up the existing artifact first if it must be preserved.
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\baseline_rcaeval.py --limit 0
 ```
 
-### Run packaged methods
+### RCAEval methods
 
-A small smoke run is preferable before a full experiment:
+Run a small smoke test first:
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\run_rcaeval.py --method anomaly_only --tag smoke --limit 20
@@ -176,94 +170,122 @@ Run all supported methods on the full dataset:
 .\.venv\Scripts\python.exe experiments\run_rcaeval.py --method all --tag full2 --limit 0
 ```
 
-Use a new tag for a new run whenever the script supports it. Check the script's arguments before choosing a tag or changing its configuration.
+Use a new tag for new runs where supported. Reusing a tag may overwrite existing results.
 
-### Analysis and report scripts
+### Analysis scripts
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\analyze_re3.py
 .\.venv\Scripts\python.exe experiments\compare_results.py
 .\.venv\Scripts\python.exe experiments\analyze_graph_controls.py
 .\.venv\Scripts\python.exe experiments\write_results_md.py
+.\.venv\Scripts\python.exe experiments\paired_analysis.py
 ```
 
-These scripts have different purposes: some analyze saved results, while others generate or update reports. Read their output paths before running them, because existing files may be overwritten.
+Some scripts generate or update reports; check their output paths before running them.
 
-The evaluated task uses the reference window `[time_start, inject_time)` and the observation window `[inject_time, time_end)`. The injection timestamp is treated as known.
+The main evaluation uses the reference window `[time_start, inject_time)` and the observation window `[inject_time, time_end)`. The injection timestamp is treated as known.
+
+### OpenRCA evaluation
+
+The Bank and Telecom evaluators use the dataset layout described in Section 4.2:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\evaluate_openrca_bank.py
+.\.venv\Scripts\python.exe experiments\evaluate_openrca_telecom.py
+```
+
+Check each script's `--help` output if you need to change its options. Do not overwrite the saved primary outputs without backing them up or selecting a supported new output name.
 
 ## 8. Results and evaluation
 
-The repository includes previously generated experiment artifacts under `results/`.
+The `results/` directory contains previously generated outputs. Common metrics include:
 
-Metrics include:
-
-- **Hit@1:** Whether the correct root-cause service ranks first.
-- **Hit@3 and Hit@5:** Whether the correct service appears within the top three or five.
+- **Hit@1:** Whether a correct root-cause service ranks first.
+- **Hit@3 / Hit@5:** Whether a correct service appears in the top three or five.
 - **MRR:** Mean reciprocal rank of the correct service.
-- **Paired statistical comparisons:** Tests and confidence intervals comparing methods on the same cases.
+- **Paired statistical comparisons:** Comparisons on the same evaluated cases.
 
-Always report the number of evaluated and skipped cases alongside the metrics. Results should be interpreted with the limitations documented in `docs/limitations.md` and `docs/experiment_protocol.md`.
+Always report evaluated, skipped, and unscoreable case counts alongside scores. Interpret findings with `docs/limitations.md` and `docs/experiment_protocol.md`.
 
-Do not assume that the existing results were reproduced on your machine simply because they are committed to GitHub.
+### Main RCAEval full-run results
+
+The saved `full2` run reports the following values:
+
+| Method | Hit@1 | Hit@3 | Hit@5 | MRR |
+|---|---:|---:|---:|---:|
+| Anomaly-only | 0.7572 | 0.9222 | 0.9550 | 0.8447 |
+| Metrics + graph | 0.7967 | 0.9250 | 0.9563 | 0.8657 |
+| Metrics, logs and traces | 0.7613 | 0.9277 | 0.9591 | 0.8471 |
+| Full method | 0.8008 | 0.9291 | 0.9591 | 0.8695 |
+
+The full run evaluated 733 cases; 2 were skipped because injection timestamps fell outside the available metric windows. These are saved results, not a claim that a new machine has reproduced the run.
+
+### Additional OpenRCA results
+
+- Bank summary: `results/bank_canonical_v1_summary.json`
+- Bank per-incident results: `results/bank_canonical_v1_per_incident.csv`
+- Telecom primary v2 summary: `results/telecom_canonical_v2_summary.json`
+- Telecom primary v2 per-incident results: `results/telecom_canonical_v2_per_incident.csv`
+- Telecom sensitivity analyses: `results/telecom_sensitivity_5_summary.json` and `results/telecom_sensitivity_30_summary.json`
+- Paired statistical report: `results/paired_analysis_full2.md`
+
+The recorded Bank run evaluated 135 incidents, with one incident having no scored components. Its strict Hit@1 was 0.17037, tie-aware Hit@1 was 0.28148, and tie-aware MRR was 0.37242.
+
+The recorded Telecom primary v2 run evaluated 47 incidents; three had no scored components and one had unscoreable ground truth. Its strict Hit@1 was 0.04255, tie-aware Hit@1 was 0.06383, and MRR was 0.14807.
+
+OpenRCA and RCAEval results should be interpreted separately. Their telemetry, coverage, scoreability, and dataset-specific assumptions differ. Read the corresponding summaries and limitations before drawing cross-dataset conclusions.
 
 ## 9. Repository layout
 
 ```text
 apex-rca/
-├── apex_rca/       # Core ranking and telemetry modules
-├── data/           # Local datasets; not committed
-├── docs/           # Methodology, architecture and handoff notes
+├── apex_rca/       # Core scoring, graph, telemetry, and ranking modules
+├── data/           # Local datasets; ignored by Git
+├── docs/           # Methodology, architecture, limitations, and handover
 ├── experiments/    # Dataset preparation and experiment scripts
-├── results/        # Saved experiment artifacts and reports
+├── results/        # Saved results, reports, and small generated cache
 ├── tests/          # Unit tests
-├── app.py          # Streamlit dashboard
+├── app.py          # Streamlit research dashboard
 ├── requirements.txt
 └── README.md
 ```
 
 ## 10. Collaboration workflow
 
-The repository is shared by the project collaborators. Keep the `main` branch as the stable baseline and do development on separate branches.
-
-Current branch plan:
-
-- `main` — published baseline
-- `sahil` — Sahil's development branch
-- `friend-work` — collaborator's development branch
-
-Check your branch before editing:
+Keep `main` as the stable branch and develop on separate branches. Check the current branch and working tree before editing:
 
 ```powershell
 git branch --show-current
 git status
 ```
 
-Create a branch if you do not already have one:
+Stage only files intended for the commit, then inspect the staged diff:
 
 ```powershell
-git switch -c your-branch-name
+git add <intended-files>
+git diff --cached --check
+git diff --cached --stat
 ```
 
-Save and push your changes:
+Commit and push to your working branch:
 
 ```powershell
-git add README.md
-git commit -m "Update project documentation"
-git push
+git commit -m "Describe the change"
+git push -u origin <your-branch>
 ```
 
-Replace `README.md` with the files you actually intend to commit when adding code. Review `git status` before staging changes, and never commit `.venv`, datasets, secrets or large local archives.
-
-When a task is complete, review the changes and merge them into `main` through a pull request or an explicitly reviewed merge. Do not develop directly on `main`.
+Review changes before merging into `main`. Never commit `.venv`, datasets, secrets, raw archives, or temporary backups. The repository's `.gitignore` excludes local `data/`; verify `git status` before committing.
 
 ## 11. Troubleshooting
 
-- **Dataset missing:** Run the preparation script in Section 4 and verify the expected directory.
-- **Missing Python package:** Activate `.venv` and run `pip install -r requirements.txt`.
-- **Tests fail:** Check the error output and Python version before changing dependencies.
-- **Dashboard opens but results are missing:** Verify the saved result files and the paths used by `app.py`.
-- **Experiment overwrites an output:** Stop and inspect the script's output paths; use a new tag or back up the existing artifact before rerunning.
-- **Collaborator cannot clone:** Confirm the invitation to the private GitHub repository has been accepted.
+- **Dataset missing:** Follow Section 4 and verify the expected local folder structure.
+- **Preparation script seems stuck:** Row counting and CSV parsing can be slow on large files. Check whether it is actively running before interrupting it. After interruption, validate the output rather than assuming the preparation completed.
+- **Missing Python package:** Use the project interpreter to install `requirements.txt`.
+- **Tests fail:** Review the traceback and Python version before changing dependencies.
+- **Dashboard opens without results:** Check the result paths used by `app.py` and verify the expected result files exist.
+- **Experiment overwrites an output:** Stop and inspect the script's output paths. Back up important files and use a new tag or output name where supported.
+- **Collaborator cannot clone:** Confirm repository access has been granted and accepted.
 
 ## 12. Research documentation
 
@@ -271,6 +293,8 @@ When a task is complete, review the changes and merge them into `main` through a
 - `docs/architecture.md` — system architecture
 - `docs/experiment_protocol.md` — experiment procedure
 - `docs/limitations.md` — known limitations
-- `docs/HANDOFF.md` — project handoff and remaining work
+- `docs/openrca_protocol.md` — OpenRCA evaluation protocol
+- `docs/HANDOFF.md` — project handover and remaining work
+- `docs/related_work_to_verify.md` — related-work claims requiring verification
 
-Dataset citations and licensing information should be retained when using or redistributing benchmark data. Consult the original dataset documentation for citation details.
+Retain dataset citations and licensing information when using or redistributing benchmark data. Consult the original dataset documentation for citation requirements and redistribution restrictions.

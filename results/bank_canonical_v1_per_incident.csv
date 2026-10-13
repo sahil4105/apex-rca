@@ -1,0 +1,137 @@
+incident_index,incident_id,truth_component,fault_label,components_in_data,scored_components,truth_scoreable,strict_hit1,tie_aware_hit1,average_rank,tie_aware_reciprocal_rank,top_components,top_score,top_tie_count,status
+0,bank-000,Mysql02,high memory usage,17,14,True,0.0,1.0,2.5,0.4,IG02;Mysql02;Tomcat01;Tomcat02,20.0,4,evaluated
+1,bank-001,Redis02,high memory usage,18,14,True,1.0,1.0,1.0,1.0,Redis02,20.0,1,evaluated
+2,bank-002,Tomcat01,high memory usage,18,14,True,1.0,1.0,1.0,1.0,Tomcat01,20.0,1,evaluated
+3,bank-003,Tomcat02,network latency,18,14,True,1.0,1.0,1.0,1.0,Tomcat02,16.81102676381097,1,evaluated
+4,bank-004,Tomcat04,network latency,18,14,True,0.0,0.0,6.0,0.16666666666666666,Mysql01;Mysql02;Tomcat01;Tomcat02,20.0,4,evaluated
+5,bank-005,Tomcat03,network latency,18,14,True,0.0,0.0,4.0,0.25,Redis02,20.0,1,evaluated
+6,bank-006,apache02,network packet loss,18,14,True,0.0,0.0,10.0,0.1,Mysql01;Redis01,20.0,2,evaluated
+7,bank-007,Tomcat01,network latency,18,14,True,0.0,0.0,5.0,0.2,Tomcat04,20.0,1,evaluated
+8,bank-008,MG01,network latency,18,14,True,0.0,0.0,4.0,0.25,Tomcat04,15.248453682529933,1,evaluated
+9,bank-009,MG02,network packet loss,18,14,True,0.0,0.0,5.0,0.2,Tomcat03,20.0,1,evaluated
+10,bank-010,Tomcat02,network latency,18,14,True,0.0,0.0,13.0,0.07692307692307693,Redis01,20.0,1,evaluated
+11,bank-011,MG01,network latency,18,14,True,0.0,0.0,11.0,0.09090909090909091,Mysql01,20.0,1,evaluated
+12,bank-012,Tomcat04,network packet loss,18,14,True,0.0,0.0,4.0,0.25,Redis01,17.920477799487603,1,evaluated
+13,bank-013,apache02,network latency,18,14,True,0.0,0.0,11.0,0.09090909090909091,IG01;IG02;MG02;Mysql01;Redis01,20.0,5,evaluated
+14,bank-014,Tomcat01,network packet loss,18,14,True,0.0,0.0,11.0,0.09090909090909091,Mysql01,15.488106903895519,1,evaluated
+15,bank-015,apache02,network packet loss,18,14,True,0.0,0.0,7.0,0.14285714285714285,Mysql01,17.914249741445214,1,evaluated
+16,bank-016,IG02,network packet loss,18,14,True,0.0,0.0,7.0,0.14285714285714285,Mysql01,16.143711497819147,1,evaluated
+17,bank-017,Tomcat01,network latency,18,14,True,0.0,0.0,6.0,0.16666666666666666,Redis01,20.0,1,evaluated
+18,bank-018,MG02,network packet loss,18,14,True,0.0,0.0,8.0,0.125,Tomcat04,20.0,1,evaluated
+19,bank-019,MG02,network latency,18,14,True,0.0,0.0,11.0,0.09090909090909091,Tomcat02,20.0,1,evaluated
+20,bank-020,Tomcat01,network packet loss,18,14,True,0.0,0.0,4.0,0.25,IG02,20.0,1,evaluated
+21,bank-021,MG02,network latency,18,14,True,0.0,0.0,5.0,0.2,Mysql01,20.0,1,evaluated
+22,bank-022,Tomcat02,network latency,18,14,True,0.0,0.0,3.0,0.3333333333333333,IG01;Tomcat04,20.0,2,evaluated
+23,bank-023,apache01,network packet loss,18,14,True,0.0,0.0,7.0,0.14285714285714285,apache02,19.457057690291204,1,evaluated
+24,bank-024,apache01,network latency,18,14,True,0.0,0.0,5.0,0.2,IG02,20.0,1,evaluated
+25,bank-025,apache02,network latency,18,14,True,0.0,0.0,3.0,0.3333333333333333,Tomcat04,9.493104134949542,1,evaluated
+26,bank-026,Tomcat01,network packet loss,18,14,True,0.0,0.0,11.0,0.09090909090909091,apache02,15.583049891671358,1,evaluated
+27,bank-027,apache02,network packet loss,18,14,True,0.0,0.0,4.0,0.25,Tomcat02,20.0,1,evaluated
+28,bank-028,apache02,network latency,18,14,True,0.0,0.0,7.0,0.14285714285714285,IG02,20.0,1,evaluated
+29,bank-029,Tomcat01,network latency,18,14,True,0.0,0.0,10.0,0.1,apache01,14.235951856348457,1,evaluated
+30,bank-030,Tomcat03,network packet loss,18,14,True,0.0,0.0,14.0,0.07142857142857142,IG01;Mysql01;Redis01;apache01,20.0,4,evaluated
+31,bank-031,MG01,network packet loss,18,14,True,0.0,0.0,11.0,0.09090909090909091,Mysql02,10.780942805578958,1,evaluated
+32,bank-032,Tomcat01,network packet loss,18,14,True,0.0,0.0,13.0,0.07692307692307693,Mysql02,20.0,1,evaluated
+33,bank-033,MG02,network packet loss,18,14,True,0.0,0.0,3.0,0.3333333333333333,Mysql02,19.291335042043293,1,evaluated
+34,bank-034,MG01,network packet loss,18,14,True,0.0,0.0,5.0,0.2,IG01,20.0,1,evaluated
+35,bank-035,apache02,network packet loss,18,14,True,0.0,0.0,3.0,0.3333333333333333,IG02,20.0,1,evaluated
+36,bank-036,Tomcat03,network packet loss,18,14,True,0.0,0.0,13.0,0.07692307692307693,Mysql02,9.875371085089908,1,evaluated
+37,bank-037,apache02,network packet loss,18,14,True,1.0,1.0,1.0,1.0,apache02,20.0,1,evaluated
+38,bank-038,MG01,network packet loss,14,14,True,0.0,0.0,7.0,0.14285714285714285,Tomcat01,20.0,1,evaluated
+39,bank-039,Tomcat04,network packet loss,14,14,True,1.0,1.0,1.0,1.0,Tomcat04,14.336265303578687,1,evaluated
+40,bank-040,MG01,network packet loss,14,14,True,0.0,0.0,7.0,0.14285714285714285,Tomcat02,20.0,1,evaluated
+41,bank-041,Tomcat04,network latency,14,14,True,0.0,0.0,6.0,0.16666666666666666,Tomcat01,16.111209617955616,1,evaluated
+42,bank-042,MG02,network latency,14,14,True,0.0,0.0,4.0,0.25,Mysql02,20.0,1,evaluated
+43,bank-043,MG01,network latency,14,14,True,0.0,0.0,7.0,0.14285714285714285,Tomcat04,20.0,1,evaluated
+44,bank-044,Tomcat04,network packet loss,14,14,True,0.0,0.0,6.0,0.16666666666666666,Mysql01;Mysql02;Tomcat01;Tomcat03,20.0,4,evaluated
+45,bank-045,MG02,high JVM CPU load,17,14,True,0.0,0.0,10.0,0.1,Redis01,16.25612662439858,1,evaluated
+46,bank-046,MG02,high JVM CPU load,17,14,True,0.0,0.0,13.0,0.07692307692307693,Mysql02,20.0,1,evaluated
+47,bank-047,IG01,high JVM CPU load,18,14,True,0.0,0.0,10.0,0.1,Mysql02,16.031296371240213,1,evaluated
+48,bank-048,MG02,JVM Out of Memory (OOM) Heap,17,14,True,1.0,1.0,1.0,1.0,MG02,20.0,1,evaluated
+49,bank-049,MG02,JVM Out of Memory (OOM) Heap,18,14,True,0.0,0.0,2.0,0.5,Redis01,20.0,1,evaluated
+50,bank-050,MG01,JVM Out of Memory (OOM) Heap,18,14,True,0.0,0.0,7.0,0.14285714285714285,Mysql02,14.843731444298017,1,evaluated
+51,bank-051,IG01,JVM Out of Memory (OOM) Heap,18,14,True,1.0,1.0,1.0,1.0,IG01,18.81101586484023,1,evaluated
+52,bank-052,Tomcat03,high disk I/O read usage,18,14,True,0.0,0.0,10.0,0.1,MG02;Tomcat04,20.0,2,evaluated
+53,bank-053,MG01,high disk I/O read usage,18,14,True,0.0,1.0,1.5,0.6666666666666666,MG01;Mysql02,20.0,2,evaluated
+54,bank-054,IG02,high disk space usage,18,14,True,0.0,0.0,5.0,0.2,MG01,16.486425559961898,1,evaluated
+55,bank-055,Tomcat01,high disk I/O read usage,18,14,True,1.0,1.0,1.0,1.0,Tomcat01,20.0,1,evaluated
+56,bank-056,Tomcat01,high disk I/O read usage,18,14,True,1.0,1.0,1.0,1.0,Tomcat01,20.0,1,evaluated
+57,bank-057,apache01,high disk I/O read usage,18,14,True,0.0,0.0,2.0,0.5,Tomcat02,20.0,1,evaluated
+58,bank-058,IG02,high disk space usage,18,14,True,1.0,1.0,1.0,1.0,IG02,20.0,1,evaluated
+59,bank-059,Tomcat01,high disk I/O read usage,18,14,True,0.0,1.0,1.5,0.6666666666666666,Mysql01;Tomcat01,20.0,2,evaluated
+60,bank-060,apache01,high disk space usage,18,14,True,0.0,0.0,9.0,0.1111111111111111,IG02,14.312950864954104,1,evaluated
+61,bank-061,Tomcat01,high disk I/O read usage,18,14,True,1.0,1.0,1.0,1.0,Tomcat01,20.0,1,evaluated
+62,bank-062,Tomcat04,high disk space usage,18,14,True,0.0,0.0,9.0,0.1111111111111111,IG01;Mysql02;Tomcat01,20.0,3,evaluated
+63,bank-063,Tomcat02,high disk I/O read usage,18,14,True,0.0,0.0,4.0,0.25,MG01,14.457484599127659,1,evaluated
+64,bank-064,apache02,high disk I/O read usage,18,14,True,0.0,0.0,8.0,0.125,Redis01,19.53752224036383,1,evaluated
+65,bank-065,IG02,high disk I/O read usage,18,14,True,1.0,1.0,1.0,1.0,IG02,20.0,1,evaluated
+66,bank-066,MG02,high disk I/O read usage,18,14,True,0.0,0.0,8.0,0.125,IG02,20.0,1,evaluated
+67,bank-067,IG02,high disk I/O read usage,18,14,True,1.0,1.0,1.0,1.0,IG02,20.0,1,evaluated
+68,bank-068,Redis02,high CPU usage,17,14,True,0.0,0.0,2.0,0.5,Mysql01,20.0,1,evaluated
+69,bank-069,Redis02,high CPU usage,18,14,True,0.0,1.0,2.0,0.5,IG02;Mysql01;Redis02,20.0,3,evaluated
+70,bank-070,Mysql01,high CPU usage,18,14,True,0.0,1.0,2.0,0.5,IG02;Mysql01;Mysql02,20.0,3,evaluated
+71,bank-071,IG01,high CPU usage,18,14,True,0.0,0.0,5.0,0.2,MG02,20.0,1,evaluated
+72,bank-072,Tomcat04,high CPU usage,18,14,True,1.0,1.0,1.0,1.0,Tomcat04,15.019560232024821,1,evaluated
+73,bank-073,Redis02,high CPU usage,18,14,True,0.0,0.0,5.0,0.2,Mysql01;Mysql02,20.0,2,evaluated
+74,bank-074,IG02,high CPU usage,18,14,True,0.0,0.0,6.0,0.16666666666666666,IG01,15.20691877634121,1,evaluated
+75,bank-075,Tomcat03,high CPU usage,18,14,True,0.0,0.0,4.0,0.25,Mysql01,20.0,1,evaluated
+76,bank-076,IG02,high CPU usage,18,14,True,0.0,0.0,2.0,0.5,Mysql01,20.0,1,evaluated
+77,bank-077,IG01,high CPU usage,18,14,True,0.0,0.0,5.0,0.2,Redis01,20.0,1,evaluated
+78,bank-078,Tomcat01,high CPU usage,18,14,True,0.0,0.0,6.0,0.16666666666666666,Mysql01;Mysql02,20.0,2,evaluated
+79,bank-079,Tomcat04,high CPU usage,18,14,True,0.0,0.0,8.0,0.125,IG02;Mysql01;Mysql02,20.0,3,evaluated
+80,bank-080,Redis02,high CPU usage,18,14,True,0.0,0.0,4.0,0.25,Tomcat02,20.0,1,evaluated
+81,bank-081,IG02,high CPU usage,18,14,True,1.0,1.0,1.0,1.0,IG02,20.0,1,evaluated
+82,bank-082,Tomcat03,high CPU usage,18,14,True,0.0,0.0,6.0,0.16666666666666666,Mysql02,20.0,1,evaluated
+83,bank-083,IG02,high CPU usage,18,14,True,0.0,0.0,3.0,0.3333333333333333,Tomcat04,20.0,1,evaluated
+84,bank-084,IG01,high CPU usage,18,14,True,0.0,0.0,3.0,0.3333333333333333,apache02,13.055284436704282,1,evaluated
+85,bank-085,Tomcat01,high CPU usage,18,14,True,0.0,0.0,3.0,0.3333333333333333,MG02,20.0,1,evaluated
+86,bank-086,apache01,high CPU usage,18,14,True,1.0,1.0,1.0,1.0,apache01,20.0,1,evaluated
+87,bank-087,IG02,high CPU usage,18,14,True,0.0,0.0,6.0,0.16666666666666666,apache01,20.0,1,evaluated
+88,bank-088,MG01,high CPU usage,18,14,True,0.0,0.0,6.0,0.16666666666666666,IG01,18.86977831751859,1,evaluated
+89,bank-089,Redis02,high CPU usage,18,14,True,0.0,0.0,9.0,0.1111111111111111,MG02,12.663136010053273,1,evaluated
+90,bank-090,Redis01,high CPU usage,18,14,True,0.0,0.0,4.0,0.25,Mysql01;Mysql02,20.0,2,evaluated
+91,bank-091,Tomcat04,high memory usage,18,14,True,0.0,1.0,1.5,0.6666666666666666,MG02;Tomcat04,20.0,2,evaluated
+92,bank-092,Tomcat04,high memory usage,18,14,True,0.0,1.0,4.0,0.25,IG01;IG02;MG01;MG02;Mysql01;Mysql02;Tomcat04,20.0,7,evaluated
+93,bank-093,Mysql01,high memory usage,18,14,True,0.0,0.0,4.0,0.25,Mysql02;apache01,20.0,2,evaluated
+94,bank-094,Tomcat01,high memory usage,14,14,True,1.0,1.0,1.0,1.0,Tomcat01,20.0,1,evaluated
+95,bank-095,MG02,network packet loss,14,14,True,0.0,0.0,9.0,0.1111111111111111,Mysql01;Mysql02;Tomcat04,20.0,3,evaluated
+96,bank-096,Tomcat03,network packet loss,15,11,True,0.0,0.0,2.0,0.5,Tomcat01,8.944555232481077,1,evaluated
+97,bank-097,Tomcat01,network packet loss,15,14,True,0.0,0.0,4.0,0.25,Mysql02,7.793598333258388,1,evaluated
+98,bank-098,Tomcat02,network latency,15,15,True,0.0,0.0,4.0,0.25,Tomcat01;Tomcat03;Tomcat04,20.0,3,evaluated
+99,bank-099,MG01,network latency,15,15,True,0.0,0.0,5.0,0.2,Mysql01;Mysql02,20.0,2,evaluated
+100,bank-100,MG01,network latency,15,15,True,0.0,0.0,4.0,0.25,Tomcat03,18.279598902828365,1,evaluated
+101,bank-101,MG02,network latency,15,15,True,0.0,0.0,3.0,0.3333333333333333,Mysql01,12.190989829449338,1,evaluated
+102,bank-102,Tomcat03,network packet loss,15,15,True,0.0,0.0,5.0,0.2,Mysql01;Mysql02,20.0,2,evaluated
+103,bank-103,MG02,network latency,15,15,True,0.0,1.0,3.0,0.3333333333333333,MG01;MG02;Mysql01;Mysql02;Tomcat01,20.0,5,evaluated
+104,bank-104,Tomcat03,network packet loss,15,15,True,0.0,0.0,4.0,0.25,Tomcat04,20.0,1,evaluated
+105,bank-105,Tomcat03,network latency,15,14,True,1.0,1.0,1.0,1.0,Tomcat03,14.635222443143723,1,evaluated
+106,bank-106,Tomcat01,network packet loss,15,14,True,0.0,0.0,7.0,0.14285714285714285,Tomcat03,8.602439191208543,1,evaluated
+107,bank-107,IG02,network latency,15,15,True,0.0,0.0,8.0,0.125,Tomcat03,14.844083704230144,1,evaluated
+108,bank-108,Tomcat04,network packet loss,15,15,True,0.0,0.0,3.0,0.3333333333333333,Mysql02;Tomcat01,20.0,2,evaluated
+109,bank-109,MG01,network latency,15,15,True,0.0,1.0,1.5,0.6666666666666666,MG01;Tomcat04,20.0,2,evaluated
+110,bank-110,apache01,network packet loss,15,15,True,0.0,0.0,13.0,0.07692307692307693,MG01;Tomcat01,20.0,2,evaluated
+111,bank-111,MG02,network packet loss,15,15,True,0.0,0.0,8.0,0.125,Mysql01;Mysql02,20.0,2,evaluated
+112,bank-112,Tomcat02,JVM Out of Memory (OOM) Heap,18,14,True,0.0,1.0,3.0,0.3333333333333333,Mysql01;Mysql02;Redis01;Tomcat02;Tomcat04,20.0,5,evaluated
+113,bank-113,Tomcat02,JVM Out of Memory (OOM) Heap,18,14,True,1.0,1.0,1.0,1.0,Tomcat02,20.0,1,evaluated
+114,bank-114,Tomcat02,JVM Out of Memory (OOM) Heap,18,14,True,0.0,1.0,2.0,0.5,Mysql01;Mysql02;Tomcat02,20.0,3,evaluated
+115,bank-115,MG01,high disk I/O read usage,14,14,True,0.0,1.0,4.5,0.2222222222222222,MG01;MG02;Mysql01;Mysql02;Tomcat01;Tomcat02;Tomcat03;Tomcat04,20.0,8,evaluated
+116,bank-116,MG01,high disk I/O read usage,14,14,True,0.0,0.0,2.0,0.5,Tomcat01,20.0,1,evaluated
+117,bank-117,Tomcat02,high disk I/O read usage,14,14,True,1.0,1.0,1.0,1.0,Tomcat02,20.0,1,evaluated
+118,bank-118,MG02,high disk I/O read usage,15,15,True,0.0,0.0,8.0,0.125,Tomcat04,14.77395956855469,1,evaluated
+119,bank-119,apache01,high disk space usage,15,15,True,0.0,0.0,8.0,0.125,MG02;Mysql01;Mysql02;Tomcat02;Tomcat04,20.0,5,evaluated
+120,bank-120,apache01,high disk I/O read usage,15,15,True,0.0,1.0,1.5,0.6666666666666666,Tomcat01;apache01,20.0,2,evaluated
+121,bank-121,MG02,high disk I/O read usage,15,14,True,0.0,1.0,2.0,0.5,MG02;Mysql01;Mysql02,20.0,3,evaluated
+122,bank-122,Tomcat01,high disk I/O read usage,15,15,True,1.0,1.0,1.0,1.0,Tomcat01,19.317276994330822,1,evaluated
+123,bank-123,Tomcat03,high CPU usage,14,0,False,,,,,,,0,no_components_scored
+124,bank-124,Tomcat03,high CPU usage,14,11,True,0.0,0.0,6.0,0.16666666666666666,Mysql01;Mysql02,20.0,2,evaluated
+125,bank-125,Tomcat01,high CPU usage,15,15,True,0.0,0.0,4.0,0.25,Mysql01;Redis01,20.0,2,evaluated
+126,bank-126,apache02,high CPU usage,15,15,True,0.0,0.0,6.0,0.16666666666666666,MG02,20.0,1,evaluated
+127,bank-127,MG01,high CPU usage,15,15,True,0.0,0.0,6.0,0.16666666666666666,Tomcat01,20.0,1,evaluated
+128,bank-128,Mysql02,high CPU usage,15,15,True,0.0,1.0,2.0,0.5,Mysql01;Mysql02;Tomcat04,20.0,3,evaluated
+129,bank-129,Mysql02,high CPU usage,15,14,True,0.0,0.0,9.0,0.1111111111111111,Tomcat01,20.0,1,evaluated
+130,bank-130,IG02,high CPU usage,15,15,True,0.0,0.0,4.0,0.25,Mysql01;Tomcat04,20.0,2,evaluated
+131,bank-131,Tomcat04,high CPU usage,15,15,True,0.0,0.0,2.0,0.5,Tomcat02,20.0,1,evaluated
+132,bank-132,Redis02,high CPU usage,15,15,True,0.0,0.0,2.0,0.5,apache01,17.820150906615723,1,evaluated
+133,bank-133,MG01,high memory usage,17,14,True,1.0,1.0,1.0,1.0,MG01,20.0,1,evaluated
+134,bank-134,Mysql02,high memory usage,17,14,True,1.0,1.0,1.0,1.0,Mysql02,20.0,1,evaluated
+135,bank-135,Redis02,high memory usage,17,14,True,0.0,0.0,9.0,0.1111111111111111,MG02;Mysql01;Mysql02,20.0,3,evaluated

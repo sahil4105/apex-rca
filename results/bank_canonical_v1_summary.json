@@ -1,0 +1,25 @@
+{
+  "dataset": "OpenRCA-Bank",
+  "tag": "bank_canonical_v1",
+  "incidents_total": 136,
+  "evaluated": 135,
+  "unscorable_or_error": 1,
+  "truth_component_scoreable": 135,
+  "mean_scored_components": 14.022058823529411,
+  "strict_hit1": 0.17037037037037037,
+  "tie_aware_hit1": 0.2814814814814815,
+  "tie_aware_mrr": 0.3724155679711235,
+  "status_counts": {
+    "evaluated": 135,
+    "no_components_scored": 1
+  },
+  "configuration": {
+    "reference_seconds": 1800,
+    "observed_seconds": 1800,
+    "min_samples_per_metric_per_window": 10,
+    "tie_policy": "average rank; Hit@1 reported both strictly and tie-aware",
+    "scoring": "median shift / robust MAD scale; top 3 metric effects averaged; effect cap 20"
+  },
+  "elapsed_seconds": 110.01,
+  "per_incident_csv": "results\\bank_canonical_v1_per_incident.csv"
+}
