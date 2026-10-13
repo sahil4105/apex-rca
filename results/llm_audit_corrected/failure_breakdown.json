@@ -1,0 +1,8 @@
+{
+  "failure_reason_field_available": false,
+  "failure_reason_field_names": [],
+  "recorded_failure_categories": "unavailable",
+  "fallback_rows": 82,
+  "live_rows": 68,
+  "note": "The historical CSV does not record a dedicated failure reason or API-error category; fallback rows are therefore represented as fallback_used=1, with no per-row cause captured."
+}

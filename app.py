@@ -91,12 +91,44 @@ def metric_value(result: dict, metric: str) -> float | None:
         return None
 
 
+def apply_app_styles() -> None:
+    """Apply presentation-only styling to the Streamlit dashboard."""
+    st.markdown(
+        """
+        <style>
+        :root {
+            --apex-ink: #172b3a;
+            --apex-muted: #60717d;
+            --apex-teal: #187e78;
+            --apex-border: #dce5e7;
+            --apex-surface: #ffffff;
+        }
+        .stApp { background: #f6f8f7; color: var(--apex-ink); }
+        .block-container { padding-top: 2.1rem; padding-bottom: 3rem; max-width: 1440px; }
+        [data-testid="stHeader"] { background: rgba(246,248,247,.94); }
+        [data-testid="stSidebar"] { background: #eef3f2; border-right: 1px solid var(--apex-border); }
+        [data-testid="stSidebar"] [data-testid="stRadio"] label { font-weight: 600; }
+        h1, h2, h3 { color: var(--apex-ink); letter-spacing: -0.02em; }
+        h1 { font-size: 2rem !important; }
+        [data-testid="stMetric"] { background: var(--apex-surface); border: 1px solid var(--apex-border); border-radius: 8px; padding: 14px 16px; }
+        [data-testid="stMetricLabel"] p { color: var(--apex-muted); font-size: .82rem; }
+        [data-testid="stMetricValue"] { color: var(--apex-ink); font-size: 1.55rem; }
+        [data-testid="stTabs"] button[aria-selected="true"] { color: var(--apex-teal); border-bottom-color: var(--apex-teal); }
+        [data-testid="stDataFrame"] { border: 1px solid var(--apex-border); border-radius: 7px; overflow: hidden; }
+        [data-testid="stVerticalBlockBorderWrapper"] { background: #fff; border-color: var(--apex-border); border-radius: 10px; }
+        [data-testid="stAlert"] { border-radius: 8px; }
+        [data-testid="stSelectbox"] label, [data-testid="stMultiSelect"] label { color: var(--apex-muted); font-size: .86rem; font-weight: 600; }
+        div.stButton > button[kind="primary"] { background: var(--apex-teal); border-color: var(--apex-teal); }
+        div.stButton > button:focus-visible { outline: 3px solid #79bcb6; outline-offset: 2px; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def show_overview(index: pd.DataFrame) -> None:
     st.title("Research overview")
-    st.caption(
-        "APEX-RCA — Evidence-grounded root-cause ranking for microservices. "
-        "Retrospective evaluation using RCAEval."
-    )
+    st.caption("APEX-RCA · Evidence-grounded root-cause ranking for microservices")
 
     summary = load_summary()
     if summary is None:
@@ -114,11 +146,13 @@ def show_overview(index: pd.DataFrame) -> None:
         if summary else None
     )
 
-    k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Indexed cases", f"{len(index):,}")
-    k2.metric("Evaluated cases", f"{evaluated:,}" if evaluated is not None else "N/A")
-    k3.metric("Skipped cases", str(skipped) if skipped is not None else "N/A")
-    k4.metric("Suites", str(index["suite"].nunique()))
+    with st.container(border=True):
+        st.caption("BENCHMARK COVERAGE")
+        k1, k2, k3, k4 = st.columns(4)
+        k1.metric("Indexed cases", f"{len(index):,}")
+        k2.metric("Evaluated cases", f"{evaluated:,}" if evaluated is not None else "N/A")
+        k3.metric("Skipped cases", str(skipped) if skipped is not None else "N/A")
+        k4.metric("Benchmark suites", str(index["suite"].nunique()))
 
     st.info(
         "Evaluation mode: retrospective diagnosis. The benchmark uses the "
@@ -126,7 +160,8 @@ def show_overview(index: pd.DataFrame) -> None:
         "windows. These results are not a live production-monitoring measurement."
     )
 
-    st.subheader("Benchmark performance")
+    st.subheader("Method comparison")
+    st.caption("Compare saved benchmark scores across anomaly and evidence-grounded ranking methods.")
 
     rows = []
     for label, filename in METHOD_FILES.items():
@@ -160,44 +195,41 @@ def show_overview(index: pd.DataFrame) -> None:
                 "mrr": "MRR",
             }
         ).set_index("Method")
-        st.dataframe(
-            pretty.style.format("{:.4f}", na_rep="N/A"),
-            use_container_width=True,
-        )
-
-        selected_metrics = st.multiselect(
-            "Metrics to compare",
-            ["Hit@1", "Hit@3", "Hit@5", "MRR"],
-            default=["Hit@1", "Hit@3"],
-        )
-        if selected_metrics:
-            chart_data = pretty[selected_metrics].reset_index().melt(
-                id_vars="Method",
-                var_name="Metric",
-                value_name="Score",
+        with st.container(border=True):
+            chart_head, chart_control = st.columns([3, 1])
+            chart_head.markdown("#### Overall benchmark scores")
+            chart_head.caption("Higher values indicate stronger ranking performance.")
+            selected_metrics = chart_control.multiselect(
+                "Metrics",
+                ["Hit@1", "Hit@3", "Hit@5", "MRR"],
+                default=["Hit@1", "Hit@3"],
             )
-            fig = px.bar(
-                chart_data,
-                x="Method",
-                y="Score",
-                color="Metric",
-                barmode="group",
-                range_y=[0, 1],
-                title="Saved benchmark results",
-                color_discrete_sequence=["#70a1ff", "#53c6a8", "#c49bff", "#f0b45b"],
+            if selected_metrics:
+                chart_data = pretty[selected_metrics].reset_index().melt(
+                    id_vars="Method", var_name="Metric", value_name="Score"
+                )
+                fig = px.bar(
+                    chart_data, x="Method", y="Score", color="Metric",
+                    barmode="group", range_y=[0, 1],
+                    color_discrete_sequence=["#187e78", "#496a83", "#88aaa5", "#9aa7b2"],
+                )
+                fig.update_layout(
+                    height=390, margin=dict(l=10, r=10, t=20, b=10),
+                    legend_title_text="Metric", xaxis_title="", yaxis_title="Score (0–1)",
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#52636f"), yaxis=dict(gridcolor="#e7edef", zeroline=False),
+                )
+                st.plotly_chart(fig, use_container_width=True)
+        with st.expander("Detailed benchmark results", expanded=False):
+            st.dataframe(
+                pretty.style.format("{:.4f}", na_rep="N/A"),
+                use_container_width=True,
             )
-            fig.update_layout(
-                height=390,
-                margin=dict(l=10, r=10, t=55, b=10),
-                legend_title_text="Metric",
-                xaxis_title="",
-                yaxis_title="Score (0–1)",
-            )
-            st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning("No recognized saved method CSVs were found in the results folder.")
 
-    st.subheader("Performance by benchmark suite")
+    st.subheader("Suite-level performance")
+    st.caption("Explore how ranking quality varies across the RCAEval benchmark suites.")
     if summary:
         suite_rows = []
         for label, method_key in [
@@ -226,42 +258,39 @@ def show_overview(index: pd.DataFrame) -> None:
 
         if suite_rows:
             suite_df = pd.DataFrame(suite_rows)
-            suite_metric = st.selectbox(
-                "Suite chart metric",
-                ["Hit@1", "Hit@3", "Hit@5", "MRR"],
-                key="suite_metric",
-            )
-            suite_fig = px.bar(
-                suite_df,
-                x="Suite",
-                y=suite_metric,
-                color="Method",
-                barmode="group",
-                range_y=[0, 1],
-                title=f"{suite_metric} by suite",
-                color_discrete_map={
-                    "Anomaly-only": METHOD_COLORS["Anomaly-only"],
-                    "Metrics + graph": METHOD_COLORS["Metrics + graph"],
-                    "Metrics + logs/traces": METHOD_COLORS["Metrics + logs/traces"],
-                    "Full pipeline": METHOD_COLORS["Full pipeline"],
-                },
-            )
-            suite_fig.update_layout(height=380, margin=dict(l=10, r=10, t=55, b=10))
-            st.plotly_chart(suite_fig, use_container_width=True)
-            st.dataframe(
-                suite_df.style.format(
-                    {"Hit@1": "{:.3f}", "Hit@3": "{:.3f}", "Hit@5": "{:.3f}", "MRR": "{:.3f}"}
-                ),
-                hide_index=True,
-                use_container_width=True,
-            )
+            with st.container(border=True):
+                suite_control, suite_help = st.columns([1, 3])
+                suite_metric = suite_control.selectbox(
+                    "Metric to inspect", ["Hit@1", "Hit@3", "Hit@5", "MRR"], key="suite_metric"
+                )
+                suite_help.caption("Select a metric to focus the comparison across suites.")
+                suite_fig = px.bar(
+                    suite_df, x="Suite", y=suite_metric, color="Method",
+                    barmode="group", range_y=[0, 1],
+                    color_discrete_map={
+                        "Anomaly-only": "#496a83",
+                        "Metrics + graph": "#187e78",
+                        "Metrics + logs/traces": "#88aaa5",
+                        "Full pipeline": "#172b3a",
+                    },
+                )
+                suite_fig.update_layout(
+                    height=360, margin=dict(l=10, r=10, t=20, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#52636f"), yaxis=dict(gridcolor="#e7edef", zeroline=False),
+                )
+                st.plotly_chart(suite_fig, use_container_width=True)
+            with st.expander("Suite-level result table", expanded=False):
+                st.dataframe(
+                    suite_df.style.format(
+                        {"Hit@1": "{:.3f}", "Hit@3": "{:.3f}", "Hit@5": "{:.3f}", "MRR": "{:.3f}"}
+                    ),
+                    hide_index=True,
+                    use_container_width=True,
+                )
 
     llm_summary_file = RESULTS / "llm_evaluation" / "llm_summary.json"
     if llm_summary_file.exists():
-        st.subheader("LLM Root-Cause Diagnosis Evaluation")
-        st.caption(
-            "Evaluation across Raw-Log prompting, Anomaly-Only, and Topology-Grounded evidence."
-        )
         llm_sum = cached_json(str(llm_summary_file), llm_summary_file.stat().st_mtime)
         llm_rows = []
         labels = {
@@ -283,19 +312,18 @@ def show_overview(index: pd.DataFrame) -> None:
                     "Mean Latency": f"{d.get('mean_latency_s', 0.0):.2f}s",
                 })
         if llm_rows:
-            st.dataframe(pd.DataFrame(llm_rows), hide_index=True, use_container_width=True)
+            with st.expander("LLM diagnosis evaluation", expanded=False):
+                st.caption("Evaluation across raw-log prompting, anomaly-only and topology-grounded evidence. Oracle control is evaluation-only.")
+                st.dataframe(pd.DataFrame(llm_rows), hide_index=True, use_container_width=True)
 
-    with st.expander("Interpretation and limitations"):
+    with st.expander("Score definitions and research limitations", expanded=False):
         st.markdown(
             """
-            - **Hit@k** measures whether the labelled root-cause service appears
-              among the first *k* ranked candidates.
+            - **Hit@1, Hit@3 and Hit@5** indicate whether the labelled root-cause service appears among the first 1, 3 or 5 ranked candidates.
             - **MRR** rewards ranking the labelled service higher.
-            - Missing logs or traces mean that evidence source is unavailable;
-              absence is not interpreted as proof of system health.
+            - Missing logs or traces mean that evidence source is unavailable; absence is not proof of system health.
             - A ranked service is a diagnostic candidate, not proof of causality.
-            - Results apply to the evaluated RCAEval cases and configuration.
-              They do not establish performance on unseen production incidents.
+            - Results apply to the evaluated RCAEval cases and configuration; they do not establish performance on unseen production incidents.
             """
         )
 
@@ -315,39 +343,43 @@ def rank_table(result, label: str) -> pd.DataFrame:
 
 def show_diagnosis(index: pd.DataFrame) -> None:
     st.title("Incident explorer")
-    st.caption(
-        "Select an RCAEval case and inspect service rankings, available evidence, "
-        "and telemetry around the recorded injection time."
-    )
+    st.caption("Investigate one recorded RCAEval incident across rankings, evidence and telemetry.")
 
     suites = ["All"] + sorted(index["suite"].astype(str).unique().tolist())
-    f1, f2, f3 = st.columns(3)
-    suite = f1.selectbox("Benchmark suite", suites, key="case_suite")
-    filtered = index if suite == "All" else index[index["suite"].astype(str) == suite]
+    with st.container(border=True):
+        st.caption("FIND AN INCIDENT")
+        f1, f2, f3 = st.columns(3)
+        suite = f1.selectbox("Benchmark suite", suites, key="case_suite")
+        filtered = index if suite == "All" else index[index["suite"].astype(str) == suite]
 
-    systems = ["All"] + sorted(filtered["system_name"].astype(str).unique().tolist())
-    system = f2.selectbox("Application", systems, key="case_system")
-    if system != "All":
-        filtered = filtered[filtered["system_name"].astype(str) == system]
+        systems = ["All"] + sorted(filtered["system_name"].astype(str).unique().tolist())
+        system = f2.selectbox("Application", systems, key="case_system")
+        if system != "All":
+            filtered = filtered[filtered["system_name"].astype(str) == system]
 
-    faults = ["All"] + sorted(filtered["fault"].astype(str).unique().tolist())
-    fault = f3.selectbox("Fault category", faults, key="case_fault")
-    if fault != "All":
-        filtered = filtered[filtered["fault"].astype(str) == fault]
+        faults = ["All"] + sorted(filtered["fault"].astype(str).unique().tolist())
+        fault = f3.selectbox("Fault category", faults, key="case_fault")
+        if fault != "All":
+            filtered = filtered[filtered["fault"].astype(str) == fault]
 
     case_ids = sorted(filtered["case"].astype(str).tolist())
     if not case_ids:
-        st.warning("No cases match these filters.")
+        st.info("No incidents match the selected filters. Adjust the suite, application or fault category to continue.")
         return
 
-    case_id = st.selectbox("Incident case", case_ids, key="case_id")
+    pick, count = st.columns([3, 1])
+    case_id = pick.selectbox("Incident", case_ids, key="case_id")
+    count.metric("Matching incidents", f"{len(case_ids):,}")
     row = index[index["case"].astype(str) == case_id].iloc[0]
 
-    a, b, c, d = st.columns(4)
-    a.metric("Application", str(row["system_name"]))
-    b.metric("Suite / fault", f"{row['suite']} / {row['fault']}")
-    c.metric("Logs available", "Yes" if bool(row["has_logs"]) else "No")
-    d.metric("Traces available", "Yes" if bool(row["has_traces"]) else "No")
+    st.subheader("Incident summary")
+    with st.container(border=True):
+        a, b, c, d = st.columns(4)
+        a.metric("Application", str(row["system_name"]))
+        b.metric("Benchmark suite", str(row["suite"]))
+        c.metric("Logs", "Available" if bool(row["has_logs"]) else "Unavailable")
+        d.metric("Traces", "Available" if bool(row["has_traces"]) else "Unavailable")
+        st.markdown(f"**Fault category:** {row['fault']} &nbsp;&nbsp; · &nbsp;&nbsp; **Case:** `{case_id}`")
 
     with st.expander("Case metadata", expanded=False):
         st.write("**Case:**", case_id)
@@ -386,32 +418,29 @@ def show_diagnosis(index: pd.DataFrame) -> None:
         st.warning(f"Full method unavailable: {full.skip_reason}")
 
     tab_rank, tab_evidence, tab_llm, tab_telemetry, tab_raw = st.tabs(
-        ["Rankings", "Evidence", "LLM Diagnosis", "Telemetry", "Raw data"]
+        ["Ranking", "Evidence", "LLM diagnosis", "Telemetry", "Raw data"]
     )
 
     with tab_rank:
-        method_cols = st.columns(3)
-        for col, label, result in [
-            (method_cols[0], "Anomaly-only", anomaly),
-            (method_cols[1], "Metrics + graph", graph),
-            (method_cols[2], "Full pipeline", full),
-        ]:
-            with col:
-                st.subheader(label)
-                if result.skip_reason:
-                    st.warning(result.skip_reason)
-                    continue
-                st.metric("Hit@1", percent(result.hit1))
-                st.metric("Hit@3", percent(result.hit3))
-                st.metric("MRR", f"{result.mrr:.3f}")
-                st.caption(
-                    f"Ground-truth rank: {result.rank if result.rank is not None else 'Not ranked'}"
-                )
-                st.dataframe(
-                    rank_table(result, label).head(10),
-                    hide_index=True,
-                    use_container_width=True,
-                )
+        st.markdown("#### Candidate ranking")
+        st.caption("Compare methods one at a time. A high-ranked candidate is a lead for investigation, not proof of causality.")
+        methods = {
+            "Full pipeline": full,
+            "Metrics + graph": graph,
+            "Anomaly-only": anomaly,
+        }
+        label = st.selectbox("Ranking method", list(methods), key=f"rank_method_{case_id}")
+        result = methods[label]
+        if result.skip_reason:
+            st.warning(result.skip_reason)
+        else:
+            with st.container(border=True):
+                r1, r2, r3 = st.columns(3)
+                r1.metric("Hit@1", percent(result.hit1))
+                r2.metric("Hit@3", percent(result.hit3))
+                r3.metric("MRR", f"{result.mrr:.3f}")
+                st.caption(f"Ground-truth rank: {result.rank if result.rank is not None else 'Not ranked'} · Case-level evaluation values")
+                st.dataframe(rank_table(result, label).head(10), hide_index=True, use_container_width=True)
 
         if not graph.skip_reason and not full.skip_reason:
             delta = (full.hit1 or 0) - (graph.hit1 or 0)
@@ -422,7 +451,8 @@ def show_diagnosis(index: pd.DataFrame) -> None:
 
     with tab_evidence:
         result = full if not full.skip_reason else graph
-        st.subheader("Evidence summaries")
+        st.markdown("#### Evidence used by the ranking")
+        st.caption("Available evidence is summarized below. Missing sources are shown as unavailable, not as evidence of healthy behavior.")
         st.caption(
             f"Graph provenance: {result.graph_provenance or 'not available'} · "
             f"Graph edges: {result.extras.get('graph_n_edges', 'not reported')} · "
@@ -453,35 +483,32 @@ def show_diagnosis(index: pd.DataFrame) -> None:
         )
 
     with tab_llm:
-        st.subheader("LLM Root-Cause Incident Diagnosis")
-        st.caption(
-            "Synthesizes selected telemetry evidence into a validated JSON incident report. "
-            "Reuses upstream rankings and deterministic evidence."
-        )
+        st.markdown("#### Diagnosis workspace")
+        st.caption("Generate an evidence-grounded report from the selected incident. The diagnosis uses the existing ranking and evidence pipeline.")
 
-        c1, c2, c3 = st.columns([2, 1, 1])
-        with c1:
-            method_variant = st.selectbox(
-                "Evidence Grounding Mode",
-                [
-                    ("Proposed: Topology + Anomaly", "topology_anomaly"),
-                    ("Method B: Anomaly-Only (No Graph)", "anomaly_only"),
-                    ("Baseline A: Raw Logs", "raw_logs"),
-                ],
-                format_func=lambda x: x[0],
-                key=f"llm_variant_{case_id}",
-            )[1]
-        with c2:
-            candidate_k = st.selectbox(
-                "Candidate Set",
-                [3, 1],
-                format_func=lambda k: f"Top-{k} Candidates",
-                key=f"llm_k_{case_id}",
-            )
-        with c3:
-            st.write("")
-            st.write("")
-            generate_clicked = st.button("Generate Report", key=f"btn_gen_{case_id}")
+        with st.container(border=True):
+            c1, c2, c3 = st.columns([2, 1, 1])
+            with c1:
+                method_variant = st.selectbox(
+                    "Evidence grounding mode",
+                    [
+                        ("Proposed: Topology + Anomaly", "topology_anomaly"),
+                        ("Method B: Anomaly-only (No Graph)", "anomaly_only"),
+                        ("Baseline A: Raw Logs", "raw_logs"),
+                    ],
+                    format_func=lambda x: x[0],
+                    key=f"llm_variant_{case_id}",
+                )[1]
+            with c2:
+                candidate_k = st.selectbox(
+                    "Candidate set", [3, 1],
+                    format_func=lambda k: f"Top-{k} candidates",
+                    key=f"llm_k_{case_id}",
+                )
+            with c3:
+                st.write("")
+                st.write("")
+                generate_clicked = st.button("Generate diagnosis", key=f"btn_gen_{case_id}", type="primary", use_container_width=True)
 
         cache_key = f"report_{case_id}_{method_variant}_{candidate_k}"
         upstream_diag = full if not full.skip_reason else graph
@@ -507,9 +534,9 @@ def show_diagnosis(index: pd.DataFrame) -> None:
             report, meta, audit, package = st.session_state[cache_key]
 
             if meta.get("fallback_used"):
-                st.warning(f"Deterministic Fallback Active: {meta.get('error', 'API unavailable')}")
+                st.warning(f"Deterministic fallback active: {meta.get('error', 'API unavailable')}")
             else:
-                st.success(f"Generated via `{meta.get('model')}` in {meta.get('latency_s', 0.0):.2f}s")
+                st.success(f"LLM response · `{meta.get('model')}` · {meta.get('latency_s', 0.0):.2f}s")
 
             v_col1, v_col2, v_col3 = st.columns(3)
             with v_col1:
@@ -560,7 +587,8 @@ def show_diagnosis(index: pd.DataFrame) -> None:
             st.info("Click 'Generate Report' to execute or view the grounded LLM diagnosis for this case.")
 
     with tab_telemetry:
-        st.subheader("Metric telemetry")
+        st.markdown("#### Metric telemetry")
+        st.caption("The dashed marker is the recorded fault-injection time for this retrospective case.")
         metrics = bundle.metrics
         mapping = service_metric_columns(metrics)
         focus = [name for name, _ in anomaly.ranked[:4]]
@@ -593,7 +621,7 @@ def show_diagnosis(index: pd.DataFrame) -> None:
                 )
             except (TypeError, ValueError):
                 pass
-            fig.update_layout(height=480, margin=dict(l=10, r=10, t=60, b=10))
+            fig.update_layout(height=420, margin=dict(l=10, r=10, t=60, b=10), paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig, use_container_width=True)
             st.caption(
                 "The dashed line marks the recorded injection time. "
@@ -603,30 +631,29 @@ def show_diagnosis(index: pd.DataFrame) -> None:
             st.info("No compatible service metrics are available to plot for this case.")
 
     with tab_raw:
-        st.subheader("Logs")
-        if bundle.logs_loaded and bundle.logs is not None and not bundle.logs.empty:
-            logs = bundle.logs.copy()
-            if "timestamp" in logs.columns:
-                timestamps = pd.to_numeric(logs["timestamp"], errors="coerce")
-                logs = logs.loc[timestamps >= float(row["inject_time"])]
-            st.write(f"Post-injection log rows shown: {min(len(logs), 100)}")
-            st.dataframe(logs.head(100), hide_index=True, use_container_width=True)
-        else:
-            st.info("Logs are unavailable or empty for this case.")
+        st.markdown("#### Raw incident data")
+        st.caption("Detailed records are kept secondary to the investigation summary.")
+        with st.expander("Logs", expanded=False):
+            if bundle.logs_loaded and bundle.logs is not None and not bundle.logs.empty:
+                logs = bundle.logs.copy()
+                if "timestamp" in logs.columns:
+                    timestamps = pd.to_numeric(logs["timestamp"], errors="coerce")
+                    logs = logs.loc[timestamps >= float(row["inject_time"])]
+                st.write(f"Post-injection log rows shown: {min(len(logs), 100)}")
+                st.dataframe(logs.head(100), hide_index=True, use_container_width=True)
+            else:
+                st.info("Logs are unavailable or empty for this case.")
 
-        st.subheader("Trace data")
-        if bundle.traces_loaded and bundle.traces is not None and not bundle.traces.empty:
-            st.write(f"Trace rows available: {len(bundle.traces):,}")
-            st.dataframe(
-                bundle.traces.head(100),
-                hide_index=True,
-                use_container_width=True,
-            )
-        else:
-            st.info("Traces are unavailable or empty for this case.")
+        with st.expander("Trace data", expanded=False):
+            if bundle.traces_loaded and bundle.traces is not None and not bundle.traces.empty:
+                st.write(f"Trace rows available: {len(bundle.traces):,}")
+                st.dataframe(bundle.traces.head(100), hide_index=True, use_container_width=True)
+            else:
+                st.info("Traces are unavailable or empty for this case.")
 
 
 def main() -> None:
+    apply_app_styles()
     st.sidebar.title("APEX-RCA")
     st.sidebar.caption("Research prototype · RCAEval")
     page = st.sidebar.radio(

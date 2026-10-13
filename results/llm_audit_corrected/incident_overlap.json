@@ -1,0 +1,76 @@
+{
+  "setting_pairs": [
+    {
+      "setting_a": "baseline_raw_logs",
+      "setting_b": "method_anomaly_only",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "baseline_raw_logs",
+      "setting_b": "proposed_topology_anomaly",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "baseline_raw_logs",
+      "setting_b": "ranking_oracle_control",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "baseline_raw_logs",
+      "setting_b": "ranking_top1_evidence",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "method_anomaly_only",
+      "setting_b": "proposed_topology_anomaly",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "method_anomaly_only",
+      "setting_b": "ranking_oracle_control",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "method_anomaly_only",
+      "setting_b": "ranking_top1_evidence",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "proposed_topology_anomaly",
+      "setting_b": "ranking_oracle_control",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "proposed_topology_anomaly",
+      "setting_b": "ranking_top1_evidence",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    },
+    {
+      "setting_a": "ranking_oracle_control",
+      "setting_b": "ranking_top1_evidence",
+      "shared_incidents": 30,
+      "total_union": 30,
+      "identical_case_set": true
+    }
+  ],
+  "all_conditions_same_incidents": true,
+  "total_unique_incidents": 30
+}

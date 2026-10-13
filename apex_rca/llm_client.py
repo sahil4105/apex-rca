@@ -19,6 +19,21 @@ DEFAULT_TEMPERATURE = 0.0
 DEFAULT_MAX_TOKENS = 1200
 
 
+def _failure_category(error: BaseException | str | None) -> str:
+    message = str(error or "").lower()
+    if not message:
+        return "unexpected_exception"
+    if any(token in message for token in ["429", "rate limit", "quota", "too many requests"]):
+        return "rate_limit"
+    if any(token in message for token in ["timeout", "timed out", "deadline"]):
+        return "timeout"
+    if any(token in message for token in ["api key", "unauthorized", "authentication", "forbidden"]):
+        return "missing_api_key"
+    if any(token in message for token in ["json", "decode", "parse", "malformed"]):
+        return "malformed_response"
+    return "unexpected_exception"
+
+
 def get_groq_client() -> Any | None:
     """Return an initialized Groq client if the SDK and API key are available."""
     api_key = os.environ.get("GROQ_API_KEY", "").strip()
@@ -81,10 +96,13 @@ def generate_incident_diagnosis(
         "model": selected_model,
         "success": False,
         "fallback_used": False,
+        "llm_call_successful": False,
         "latency_s": 0.0,
         "prompt_tokens": None,
         "completion_tokens": None,
         "error": None,
+        "error_detail": None,
+        "failure_category": None,
     }
 
     if client is None:
@@ -92,7 +110,10 @@ def generate_incident_diagnosis(
 
     if client is None:
         metadata["fallback_used"] = True
+        metadata["llm_call_successful"] = False
+        metadata["failure_category"] = "missing_api_key"
         metadata["error"] = "Groq client unavailable (GROQ_API_KEY unset or groq SDK missing)"
+        metadata["error_detail"] = metadata["error"]
         fallback_rep = IncidentReport.fallback_from_deterministic(
             ranked_candidates=[
                 (svc, package.candidate_scores.get(svc, 0.0))
@@ -128,14 +149,31 @@ def generate_incident_diagnosis(
 
         try:
             data = json.loads(content)
-        except json.JSONDecodeError as jde:
-            # Strip markdown block wrappers if present
+        except json.JSONDecodeError:
             cleaned = content.strip()
             if cleaned.startswith("```"):
                 cleaned = cleaned.strip("`")
-                if cleaned.startswith("json"):
+                if cleaned.lower().startswith("json"):
                     cleaned = cleaned[4:].strip()
-            data = json.loads(cleaned)
+            try:
+                data = json.loads(cleaned)
+            except json.JSONDecodeError:
+                metadata["success"] = False
+                metadata["fallback_used"] = True
+                metadata["llm_call_successful"] = False
+                metadata["failure_category"] = "malformed_response"
+                metadata["error"] = "API error: JSONDecodeError: model response was not valid JSON"
+                metadata["error_detail"] = metadata["error"]
+                fallback_rep = IncidentReport.fallback_from_deterministic(
+                    ranked_candidates=[
+                        (svc, package.candidate_scores.get(svc, 0.0))
+                        for svc in package.candidate_services
+                    ],
+                    explanations=deterministic_fallback_explanations or [],
+                    note="LLM response was not valid JSON; returned deterministic baseline.",
+                )
+                fallback_rep.generation_latency_s = time.perf_counter() - started
+                return fallback_rep, metadata
 
         data["model_name"] = selected_model
         data["generation_latency_s"] = latency
@@ -144,13 +182,20 @@ def generate_incident_diagnosis(
 
         report = IncidentReport.from_dict(data, raw_response=content)
         metadata["success"] = True
+        metadata["llm_call_successful"] = True
+        metadata["failure_category"] = None
+        metadata["error"] = None
+        metadata["error_detail"] = None
         return report, metadata
 
     except Exception as exc:
         latency = time.perf_counter() - started
         metadata["latency_s"] = latency
         metadata["fallback_used"] = True
+        metadata["llm_call_successful"] = False
+        metadata["failure_category"] = _failure_category(exc)
         metadata["error"] = f"API error: {type(exc).__name__}: {str(exc)}"
+        metadata["error_detail"] = metadata["error"]
 
         fallback_rep = IncidentReport.fallback_from_deterministic(
             ranked_candidates=[

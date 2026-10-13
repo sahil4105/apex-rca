@@ -1,7 +1,11 @@
+import os
+from pathlib import Path
 from unittest.mock import MagicMock
+
 import pytest
 
 from apex_rca.llm_client import generate_incident_diagnosis
+from experiments.run_llm_experiments import prepare_output_dir
 from apex_rca.llm_evidence import EvidenceItem, EvidencePackage
 from apex_rca.llm_report import IncidentReport
 
@@ -103,8 +107,59 @@ def test_mocked_groq_client_handles_api_exception_cleanly():
 
     assert meta["success"] is False
     assert meta["fallback_used"] is True
+    assert meta["failure_category"] == "rate_limit"
     assert "Rate Limit" in meta["error"]
     assert report.suspected_root_cause == "frontend"
     assert report.model_name == "deterministic_fallback"
     assert any("LLM API call failed" in item for item in report.uncertainty_and_limitations)
+
+
+def test_missing_api_key_uses_deterministic_fallback(monkeypatch):
+    package = sample_package()
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+
+    report, meta = generate_incident_diagnosis(
+        package,
+        client=None,
+        deterministic_fallback_explanations=[{"service": "frontend", "reasons": ["Fallback rule"]}],
+    )
+
+    assert meta["fallback_used"] is True
+    assert meta["failure_category"] == "missing_api_key"
+    assert "GROQ_API_KEY" in meta["error"]
+    assert report.suspected_root_cause == "frontend"
+
+
+def test_malformed_json_response_uses_fallback():
+    package = sample_package()
+    mock_client = MagicMock()
+    mock_choice = MagicMock()
+    mock_choice.message.content = "```json\n{not valid json}\n```"
+    mock_response = MagicMock()
+    mock_response.choices = [mock_choice]
+    mock_response.usage.prompt_tokens = 10
+    mock_response.usage.completion_tokens = 5
+    mock_client.chat.completions.create.return_value = mock_response
+
+    report, meta = generate_incident_diagnosis(
+        package,
+        client=mock_client,
+        deterministic_fallback_explanations=[{"service": "frontend", "reasons": ["fallback"]}],
+    )
+
+    assert meta["fallback_used"] is True
+    assert meta["failure_category"] == "malformed_response"
+    assert report.suspected_root_cause == "frontend"
+
+
+def test_prepare_output_dir_refuses_existing_nonempty_directory(tmp_path):
+    out_dir = tmp_path / "existing-results"
+    out_dir.mkdir()
+    (out_dir / "notes.txt").write_text("keep me", encoding="utf-8")
+
+    with pytest.raises(FileExistsError):
+        prepare_output_dir(out_dir)
+
+    prepared = prepare_output_dir(out_dir, overwrite=True)
+    assert prepared == out_dir
 

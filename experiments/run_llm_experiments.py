@@ -34,6 +34,23 @@ from apex_rca.pipeline import diagnose_case
 load_dotenv()
 
 
+def prepare_output_dir(output_dir: Path, *, overwrite: bool = False) -> Path:
+    """Create an output directory while refusing to overwrite existing results by default."""
+    if output_dir.exists() and output_dir.is_file():
+        raise FileExistsError(f"Output path is a file, not a directory: {output_dir}")
+
+    if output_dir.exists():
+        has_content = any(output_dir.iterdir())
+        if has_content and not overwrite:
+            raise FileExistsError(
+                f"Refusing to overwrite existing results in {output_dir}. "
+                "Use --force to permit writing to this directory."
+            )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir
+
+
 def select_evaluation_cohort(
     data_dir: Path,
     results_dir: Path,
@@ -132,6 +149,7 @@ def evaluate_case_settings(
 
         row_record = {
             "case": case_id,
+            "dataset_name": "RCAEval",
             "suite": suite,
             "system": system_name,
             "fault": fault,
@@ -141,6 +159,7 @@ def evaluate_case_settings(
             "upstream_top1_correct": top1_upstream_correct,
             "setting": setting_name,
             "variant": variant,
+            "evidence_mode": variant,
             "candidate_k": k,
             "oracle_provided": int(oracle_svc is not None),
             "candidate_services": "|".join(package.candidate_services),
@@ -162,7 +181,16 @@ def evaluate_case_settings(
             "prompt_tokens": report.prompt_tokens or 0,
             "completion_tokens": report.completion_tokens or 0,
             "fallback_used": int(meta.get("fallback_used", False)),
+            "llm_call_attempted": 1,
+            "llm_call_successful": int(meta.get("success", False)),
+            "result_source": "live_llm" if meta.get("success") else "deterministic_fallback",
+            "failure_category": meta.get("failure_category") or "",
+            "error_detail": (meta.get("error_detail") or meta.get("error") or "")[:500],
             "model_name": model,
+            "model_config": {
+                "temperature": 0.0,
+                "max_tokens": 1200,
+            },
         }
         results.append(row_record)
 
@@ -319,14 +347,18 @@ def main() -> None:
         "--output-dir",
         type=Path,
         default=ROOT / "results" / "llm_evaluation",
-        help="Directory to store evaluation artifacts.",
+        help="Directory to store evaluation artifacts. Existing non-empty directories are protected by default.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Allow writing into an existing non-empty output directory. This is not the default.",
     )
     args = parser.parse_args()
 
     data_dir = default_rcaeval_dir()
     results_dir = ROOT / "results"
-    out_dir = args.output_dir
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = prepare_output_dir(args.output_dir, overwrite=args.force)
 
     client = get_groq_client()
     if client is None:
