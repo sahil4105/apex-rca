@@ -1,0 +1,52 @@
+incident_index,incident_id,status,truth_component,truth_reason,truth_level,scored_components,truth_scoreable,truth_rank,strict_hit1,tie_aware_hit1,reciprocal_rank,top_component,top_score,top_components,error,metric_rows,candidate_components,metric_categories,elapsed_seconds
+0,telecom-000,evaluated,docker_003,CPU fault,pod,55,True,53.5,0,0,0.018691588785046728,os_021,19.819218240495278,os_021,,57715,55,"container,middleware,node,service",1.364
+1,telecom-001,evaluated,docker_004,CPU fault,pod,55,True,53.5,0,0,0.018691588785046728,os_020,20.0,os_020,,99195,55,"container,middleware,node,service",1.399
+2,telecom-002,evaluated,db_007,db connection limit,service,55,True,12.0,0,0,0.08333333333333333,os_017,20.0,os_017;os_020,,99293,55,"container,middleware,node,service",1.401
+3,telecom-003,evaluated,docker_002,CPU fault,pod,55,True,46.0,0,0,0.021739130434782608,db_010,20.0,db_010,,99302,55,"container,middleware,node,service",1.518
+4,telecom-004,evaluated,docker_008,CPU fault,pod,55,True,54.0,0,0,0.018518518518518517,db_004,20.0,db_004;os_020,,99284,55,"container,middleware,node,service",1.856
+5,telecom-005,evaluated,db_003,db close,service,55,True,1.0,1,1,1.0,db_003,9.388321936425754,db_003,,74446,55,"container,middleware,node,service",1.574
+6,telecom-006,evaluated,db_003,db close,service,47,True,15.0,0,0,0.06666666666666667,os_018,20.0,os_018,,50154,47,"container,middleware,node,service",1.122
+7,telecom-007,evaluated,docker_001,CPU fault,pod,47,True,42.0,0,0,0.023809523809523808,os_021,20.0,os_021,,76092,47,"container,middleware,node,service",1.361
+8,telecom-008,evaluated,os_018,network delay,node,39,True,10.0,0,0,0.1,db_003,20.0,db_003;db_009;db_013,,50282,47,"container,middleware,node,service",1.207
+9,telecom-009,truth_not_scoreable,docker_005,CPU fault,pod,39,False,,0,0,0.0,os_019,10.458756378763717,os_019,,64142,47,"container,middleware,node,service",0.984
+10,telecom-010,evaluated,docker_004,CPU fault,pod,55,True,54.0,0,0,0.018518518518518517,os_014,20.0,os_014,,57342,55,"container,middleware,node,service",1.244
+11,telecom-011,evaluated,db_003,db connection limit,service,55,True,7.0,0,0,0.14285714285714285,db_004,11.33758718525707,db_004,,98456,55,"container,middleware,node,service",1.69
+12,telecom-012,evaluated,os_021,network loss,node,55,True,36.0,0,0,0.027777777777777776,db_013,20.0,db_013,,97109,55,"container,middleware,node,service",1.721
+13,telecom-013,evaluated,os_009,network loss,node,55,True,15.0,0,0,0.06666666666666667,db_009,20.0,db_009;os_018,,98254,55,"container,middleware,node,service",1.512
+14,telecom-014,evaluated,os_021,network delay,node,55,True,5.0,0,0,0.2,os_018,20.0,os_018;os_019;os_020,,99073,55,"container,middleware,node,service",1.532
+15,telecom-015,evaluated,docker_006,CPU fault,pod,55,True,54.5,0,0,0.01834862385321101,os_006,16.704537570896928,os_006,,99219,55,"container,middleware,node,service",1.882
+16,telecom-016,evaluated,db_007,db close,service,55,True,18.0,0,0,0.05555555555555555,db_004,20.0,db_004;os_011;os_017;os_019,,98935,55,"container,middleware,node,service",1.857
+17,telecom-017,evaluated,docker_003,CPU fault,pod,55,True,51.0,0,0,0.0196078431372549,os_018,17.938040922326774,os_018,,99103,55,"container,middleware,node,service",1.805
+18,telecom-018,evaluated,docker_006,CPU fault,pod,55,True,45.0,0,0,0.022222222222222223,os_017,20.0,os_017;os_018,,99049,55,"container,middleware,node,service",1.463
+19,telecom-019,evaluated,os_020,network delay,node,55,True,5.0,0,0,0.2,db_009,20.0,db_009;db_013;os_018,,99045,55,"container,middleware,node,service",1.622
+20,telecom-020,evaluated,os_017,network loss,node,55,True,1.5,0,1,0.6666666666666666,db_003,20.0,db_003;os_017,,99209,55,"container,middleware,node,service",1.496
+21,telecom-021,evaluated,db_003,db close,service,55,True,4.0,0,0,0.25,os_019,20.0,os_019,,98800,55,"container,middleware,node,service",1.531
+22,telecom-022,evaluated,db_007,db connection limit,service,55,True,12.0,0,0,0.08333333333333333,db_009,20.0,db_009;db_011;db_012;os_018,,99395,55,"container,middleware,node,service",1.353
+23,telecom-023,evaluated,docker_008,CPU fault,pod,55,True,49.0,0,0,0.02040816326530612,db_003,20.0,db_003,,99059,55,"container,middleware,node,service",1.431
+24,telecom-024,evaluated,os_021,network delay,node,55,True,12.0,0,0,0.08333333333333333,db_010,18.082418561436203,db_010,,99049,55,"container,middleware,node,service",1.929
+25,telecom-025,evaluated,os_018,network loss,node,55,True,3.0,0,0,0.3333333333333333,os_020,9.919936068329614,os_020,,99298,55,"container,middleware,node,service",1.586
+26,telecom-026,evaluated,os_020,network delay,node,55,True,6.0,0,0,0.16666666666666666,os_019,16.75278033936839,os_019,,99451,55,"container,middleware,node,service",1.559
+27,telecom-027,evaluated,os_001,network delay,node,55,True,15.0,0,0,0.06666666666666667,os_017,14.619331844186148,os_017,,99510,55,"container,middleware,node,service",1.465
+28,telecom-028,evaluated,docker_002,CPU fault,pod,55,True,34.0,0,0,0.029411764705882353,os_018,16.216598621140303,os_018,,99574,55,"container,middleware,node,service",1.528
+29,telecom-029,evaluated,os_018,network delay,node,55,True,22.0,0,0,0.045454545454545456,redis_012,14.460406844497717,redis_012,,87364,55,"container,middleware,node,service",1.456
+30,telecom-030,evaluated,os_017,network delay,node,55,True,13.0,0,0,0.07692307692307693,os_021,20.0,os_021;os_022,,99119,55,"container,middleware,node,service",1.5
+31,telecom-031,evaluated,docker_006,CPU fault,pod,55,True,55.0,0,0,0.01818181818181818,db_009,7.790817932461013,db_009,,81934,55,"container,middleware,node,service",1.291
+32,telecom-032,evaluated,db_003,db connection limit,service,55,True,1.5,0,1,0.6666666666666666,db_003,20.0,db_003;db_009,,78625,55,"container,middleware,node,service",1.354
+33,telecom-033,evaluated,db_007,db close,service,55,True,11.0,0,0,0.09090909090909091,os_019,20.0,os_019,,95671,55,"container,middleware,node,service",1.453
+34,telecom-034,evaluated,db_007,db connection limit,service,55,True,7.0,0,0,0.14285714285714285,os_007,20.0,os_007,,98852,55,"container,middleware,node,service",1.581
+35,telecom-035,evaluated,docker_001,CPU fault,pod,55,True,48.0,0,0,0.020833333333333332,os_017,15.38064428193721,os_017,,99110,55,"container,middleware,node,service",1.557
+36,telecom-036,evaluated,os_021,network delay,node,55,True,8.0,0,0,0.125,redis_005,7.677570101240231,redis_005,,84307,55,"container,middleware,node,service",1.317
+37,telecom-037,evaluated,docker_001,CPU fault,pod,55,True,49.0,0,0,0.02040816326530612,os_018,20.0,os_018;os_021,,98564,55,"container,middleware,node,service",1.419
+38,telecom-038,evaluated,os_018,network loss,node,55,True,5.0,0,0,0.2,os_020,14.928126921339606,os_020,,99239,55,"container,middleware,node,service",1.412
+39,telecom-039,evaluated,db_003,db connection limit,service,46,True,12.0,0,0,0.08333333333333333,os_006,20.0,os_006,,77838,46,"container,middleware,node,service",1.263
+40,telecom-040,evaluated,docker_008,CPU fault,pod,46,True,10.0,0,0,0.1,db_003,20.0,db_003;os_019;os_020,,78894,46,"container,middleware,node,service",1.163
+41,telecom-041,evaluated,docker_001,CPU fault,pod,46,True,32.0,0,0,0.03125,os_019,20.0,os_019,,80251,46,"container,middleware,node,service",1.241
+42,telecom-042,evaluated,os_021,network loss,node,55,True,25.0,0,0,0.04,os_022,10.882778475079178,os_022,,70967,55,"container,middleware,node,service",1.335
+43,telecom-043,evaluated,os_009,network delay,node,55,True,6.0,0,0,0.16666666666666666,os_007,20.0,os_007;os_018,,99034,55,"container,middleware,node,service",1.514
+44,telecom-044,evaluated,os_020,network delay,node,55,True,1.5,0,1,0.6666666666666666,os_011,20.0,os_011;os_020,,99309,55,"container,middleware,node,service",1.363
+45,telecom-045,evaluated,docker_002,CPU fault,pod,55,True,54.0,0,0,0.018518518518518517,os_018,16.31348128081666,os_018,,99277,55,"container,middleware,node,service",1.612
+46,telecom-046,evaluated,os_018,network loss,node,55,True,1.0,1,1,1.0,os_018,20.0,os_018,,99366,55,"container,middleware,node,service",1.468
+47,telecom-047,evaluated,os_021,network delay,node,55,True,4.0,0,0,0.25,db_004,14.265929223436304,db_004,,99107,55,"container,middleware,node,service",1.373
+48,telecom-048,evaluated,os_017,network delay,node,55,True,1.5,0,1,0.6666666666666666,os_017,20.0,os_017;os_019,,99112,55,"container,middleware,node,service",1.574
+49,telecom-049,evaluated,db_003,db connection limit,service,55,True,5.0,0,0,0.2,os_017,20.0,os_017;os_020,,99080,55,"container,middleware,node,service",1.355
+50,telecom-050,evaluated,docker_004,CPU fault,pod,55,True,51.0,0,0,0.0196078431372549,os_018,14.77307624546746,os_018,,99164,55,"container,middleware,node,service",1.499

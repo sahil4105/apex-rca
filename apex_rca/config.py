@@ -1,4 +1,4 @@
-"""Experiment configuration and documented defaults.
+﻿"""Experiment configuration and documented defaults.
 
 The default graph weight and extra-telemetry weight are a priori choices,
 not the result of a label-driven grid search on RCAEval.
@@ -36,6 +36,8 @@ SERVICE_ALIASES: dict[str, str] = {
 MIN_WINDOW_SAMPLES = 30
 ANOMALY_EFFECT_CAP = 20.0
 TOP_K_METRICS = 3
+CANONICAL_REFERENCE_SECONDS = 1800
+CANONICAL_OBSERVED_SECONDS = 1800
 RANDOM_SEED = 42
 
 
@@ -76,3 +78,4 @@ class ExperimentConfig:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+

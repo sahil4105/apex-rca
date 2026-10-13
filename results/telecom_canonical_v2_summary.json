@@ -1,0 +1,28 @@
+{
+  "dataset": "OpenRCA-Telecom",
+  "tag": "telecom_canonical_v2",
+  "incidents_total": 51,
+  "incidents_evaluated": 47,
+  "incidents_unscorable_or_error": 4,
+  "status_counts": {
+    "evaluated": 47,
+    "no_components_scored": 3,
+    "truth_not_scoreable": 1
+  },
+  "truth_component_scoreable": 47,
+  "mean_scored_components": 53.91489361702128,
+  "strict_hit1": 0.0425531914893617,
+  "tie_aware_hit1": 0.06382978723404255,
+  "tie_aware_mrr": 0.14807461837671848,
+  "configuration": {
+    "reference_seconds": 1800,
+    "observed_seconds": 1800,
+    "min_samples_per_window": 10,
+    "scoring": "canonical robust median-shift effect with MAD/std fallback and capped effect",
+    "application_metrics_included": false,
+    "candidate_scope": "all components with scoreable infrastructure metrics in the incident window",
+    "tie_policy": "average rank for reciprocal rank; tie-aware Hit@1 counts all components tied for highest score"
+  },
+  "elapsed_seconds": 66.514,
+  "per_incident_csv": "results\\telecom_canonical_v2_per_incident.csv"
+}
